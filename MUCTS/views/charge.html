@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>포인트 페이지</title>
+  <link rel="stylesheet" href="/charge.css">
+  <script
+  type="text/javascript"
+  src="https://code.jquery.com/jquery-1.12.4.min.js"
+></script>
+<script
+  type="text/javascript"
+  src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"
+></script>
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  function mypayment(event) {
+    event.preventDefault(); // 폼 제출 막기
+    const myAmount = Number(document.getElementById("charge_money").value);
+
+    const IMP = window.IMP; // 생략 가능
+    IMP.init("imp68104701"); // 예: imp00000000
+    const uniqueId = `order_no_${new Date().getTime()}`; // 고유한 주문번호 생성
+    IMP.request_pay(
+      {
+        // param
+        pg: "kakaopay",
+        pay_method: "card",
+        merchant_uid: uniqueId,
+        name: "포인트 충전",
+        amount: myAmount, // 여기서 amount로 변경
+        
+      },
+      async (rsp) => {
+        // callback
+        if (rsp.success) {
+          // 결제 성공시
+          try {
+            console.log('Payment success, response:', rsp); // 로그 추가
+            const response = await axios.post(
+              "/charge/charge",
+              {
+                charge_money: rsp.paid_amount
+              },
+              {
+                headers: {
+                  authorization: "Bearer 4325194f13e2bf4e524871ff2f6ad9de56d66664 ",
+                },
+              }
+            );
+            console.log('Server response:', response.data); // 서버 응답 로그 추가
+            alert(response.data.message);
+            location.reload(); // 페이지 새로고침하여 업데이트
+          } catch (error) {
+            console.log('서버 오류:', error.response ? error.response.data : error.message); // 상세 오류 메시지
+            alert('결제 처리 중 오류가 발생했습니다.');
+          }
+        } else {
+          // 결제 실패시
+          console.log('Payment failed, response:', rsp); // 실패 응답 로그 추가
+          alert('결제에 실패했습니다. 다시 시도해주세요.');
+        }
+      }
+    );
+  }
+</script>
+</head>
+
+<body>
+  <!-- head -->
+  <div id="topper">
+    <div id="topper-menu">
+      <a href="">커뮤니티</a>
+      <a href="">이벤트</a>
+      <a href="">공지사항</a>
+    </div>
+  </div>
+  <div id="header">
+    <div id="header-width-container">
+      <div id="header-logo">
+        <a href="/">
+          <img src="/Mainlogo.png" alt="Buts Logo">
+        </a>
+      </div>
+      <div id="btns">
+        <div id="cash_btn">
+          <a href="/charge/charge">POINT</a>
+        </div>
+        <div id="mypage_btn">
+          <a href="/user/myPage">MY</a>
+        </div>
+        {% if user %}
+        <div id="header-right" style="cursor:pointer;" onclick="location.href='/logout'">
+          로그아웃
+        </div>
+        {% else %}
+        <div id="header-right" style="cursor:pointer;" onclick="location.href='/login'">
+          로그인
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <div class="points-header">
+      <div class="username">
+        <span class="title_xs">닉네임:</span> {{charge.nick}}<br>
+      </div>
+      <div class="points">
+        <span class="title_xs">보유 포인트:</span><span class="points">{{charge.point}}</span>
+      </div>
+    </div>
+    <div class="points-details">
+      <form id="chargeForm" action="/charge/charge" method="POST" onsubmit="mypayment(event)">
+        <span class="title_xl"> 포인트 충전: </span> <input type="number" id="charge_money" name="charge_money" min="0" required>
+        <button id="charge-id" type="submit">충전</button>
+      </form>
+    </div>
+    <div class="points-history">
+      <h2>포인트 상세내역</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>충전일</th>
+            <th>포인트 충전</th>
+            <th>포인트 사용</th>
+          </tr>
+        </thead>
+        <tbody id="points-history">
+
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        function loadPointsHistory() {
+          $.get("/charge/history", function (data) {
+            let tbody = $("#points-history");
+            tbody.empty(); // 기존 내용 삭제
+
+            for (let i = 0; i < data.length; i++) {
+              let row = data[i];
+
+              // 데이터 항목에서 필요한 값 추출
+              let chargeMoney = row.charge_money > 0 ? row.charge_money : '0';
+              let usageMoney = row.charge_money < 0 ? Math.abs(row.charge_money) : '0';
+
+              // HTML 문자열 생성
+              let rowHtml = `
+                              <tr>
+                                  <td>${new Date(row.charge_date).toLocaleString()}</td>
+                                  <td style="color:blue" ;>${chargeMoney} 포인트</td>
+                                  <td style="color:red">${usageMoney} 포인트</td>
+                              </tr>
+                          `;
+
+              // tbody에 HTML 추가
+              tbody.append(rowHtml);
+            }
+
+
+          }).fail(function () {
+            alert('포인트 내역을 불러오는 데 실패했습니다.');
+          });
+
+        }
+
+        // 페이지 로드 시 포인트 내역 로드
+        loadPointsHistory();
+      });
+    </script>
+
+    <div class="pagination">
+      <a href="#" class="active">1</a>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <div class="footer">
+    <div class="width-container">
+      <div class="padding-left">
+        <img src="/Mainlogo.png" alt="Footer Image">
+        <div class="footer-logo">
+          <a href="https://butscorp.com/" target="_blank" class="v-bar">회사소개</a>
+          <a href="https://butscorp.com/contact/" target="_blank" class="v-bar">제휴문의</a>
+          <a href="" target="_blank" class="v-bar">1:1문의</a>
+          <a href="https://buts.co.kr/bbs/page.php?hid=privacy" target="_blank" class="v-bar">개인정보처리방침</a>
+          <a href="https://buts.co.kr/bbs/page.php?hid=provision" target="_blank" class="v-bar">서비스이용약관</a>
+          <a href="https://buts.co.kr/bbs/faq.php" target="_blank" class="v-bar">FAQ</a>
+          <br>
+          <br>
+          <span class="v-bar">상호 : 먹츠</span><span>대표 : 김유민</span>
+          <br>
+          <span>주소 : 경기도 성남시 분당구 장미로 이치노구</span>
+          <br>
+          <span class="v-bar">사업자등록번호 : 123-45-78912</span><span>통신판매번호 : 제 2022-호주-0044호</span>
+          <br>
+          <span class="v-bar">개인정보보호책임 : 주현빈</span><span>호스팅 사업자 : Amazon Web Service(AWS)</span>
+          <br>
+          <span class="v-bar">이메일 : pongki@Rupongi</span><span>대표전화번호 : 123-456-789</span>
+          <br>
+          <br>
+          <span>Copyright © 2024 Mucts Inc. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="width-container">
+      먹츠는 통신판매중개자이며, 통신판매의 당사자가 아닙니다. 파티정보, 구매에 관한 의무와 책임은 판매자에게 있습니다.
+      <br>
+      먹츠는 소비자 보호와 안전거래를 위해 고객센터(manager@buts.co.kr)를 운영하고 있으며, 분쟁이 발생 된 경우 별도의 분쟁처리절차에 의거 분쟁해결 및 청약철회 등이 진행 됩니다.
+    </div>
+  </div>
+
+</body>
+
+</html>

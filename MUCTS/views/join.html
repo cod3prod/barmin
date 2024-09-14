@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 카카오 주소입력api -->
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="join.css">
+    <title>BUTS</title>
+</head>
+
+<body>
+    <!-- head -->
+    <div id="topper">
+        <div id="topper-menu">
+            <a href="">커뮤니티</a>
+            <a href="">이벤트</a>
+            <a href="">공지사항</a>
+        </div>
+    </div>
+    <div id="header">
+        <div id="header-width-container">
+            <div id="header-logo">
+                <a href="/">
+                    <img src="Mainlogo.png" alt="Buts Logo">
+                </a>
+            </div>
+            <div id="header-right" style="cursor:pointer;" onclick="location.href='/login'">
+                로그인
+            </div>
+        </div>
+    </div>
+    <!-- body -->
+    <div id="main-body">
+        <div id="main-width-container">
+            <br>
+            <div id="form-login">
+                <form id="addressForm" action="/user/join" method="post">
+                    <div id="user_info">
+                        <ul>
+                            <li><span class="subject">아이디</span> <input type="text" name="user_id" id="id"><br></li>
+                            <li><span class="subject">비밀번호</span> <input type="password" name="pw" id="pw"><br></li>
+                            <li><span class="subject">이름</span> <input type="text" name="name" id="name"></li>
+                        </ul>
+                    </div>
+                    <br>
+                    <div id="nick">
+                        <ul>
+                            <li><span class="subject">별명</span> <input type="text" name="nick" id="user_nick"><br></li>
+                            <li><span class="subject">주소</span> 
+                                <input type="text" id="sample4_postcode" class="rgst_inputBox" placeholder="우편번호" name="addr_code">
+                                <input type="button" id="searchAddrButton" value="우편번호 찾기" class="searchAddr"><br>
+                            </li>
+                            <li><input type="text" id="sample4_jibunAddress" class="rgst_inputBox" placeholder="지번주소" name="addr_jibun">
+                                <input type="text" id="sample4_detailAddress" class="rgst_inputBox" placeholder="상세주소" name="addr_detail"><br>
+                            </li>
+                            <li><span class="subject">이메일</span> <input type="email" name="email" id="email"><br></li>
+                            <li><span class="subject">생년월일</span> <input type="text" name="birth_date" id="birth_date"
+                                        placeholder="8자리를 입력해주세요"><br></li>
+                            <li><span class="subject">성별</span> <input type="radio" name="gender" value="M"
+                                        id="gender">남
+                                    <input type="radio" name="gender" value="W" id="gender-radio">여<br></li>
+                            <li><span class="subject">휴대폰</span> <input type="text" name="tel" id="tel"></li>
+                        </ul>
+                    </div>
+                    <br>
+                    <div id="make_p">
+                        <ul>
+                            <li><span class="subject">계좌</span> <input type="text" name="wd_account"
+                                        id="wd_account"><br>
+                            </li>
+                            <li><span class="subject">계좌번호</span> <input type="text" name="ba_number"
+                                        id="ba_number"><br>
+                            </li>
+                        </ul>
+                    </div>
+                    <br>
+                    <input type="submit" style="cursor: pointer" value="회원가입" id="submit">
+                    <input type="hidden" id="fullAddress" name="address">
+                </form>
+            </div>
+        </div>
+    </div>
+    <br>
+    <!-- footer -->
+    <div class="footer">
+        <div class="width-container">
+            <div class="padding-left">
+                <img src="Mainlogo.png" alt="Buts Logo">
+                <div class="footer-logo">
+                    <a href="https://butscorp.com/" target="_blank" class="v-bar">회사소개</a>
+                    <a href="https://butscorp.com/contact/" target="_blank" class="v-bar">제휴문의</a>
+                    <a href="" target="_blank" class="v-bar">1:1문의</a>
+                    <a href="https://buts.co.kr/bbs/page.php?hid=privacy" target="_blank" class="v-bar">개인정보처리방침</a>
+                    <a href="https://buts.co.kr/bbs/page.php?hid=provision" target="_blank" class="v-bar">서비스이용약관</a>
+                    <a href="https://buts.co.kr/bbs/faq.php" target="_blank" class="v-bar">FAQ</a>
+                    <br>
+                    <br>
+                    <span class="v-bar">상호 : 먹츠</span><span>대표 : 김유민</span>
+                    <br>
+                    <span>주소 : 경기도 성남시 분당구 장미로 이치노구</span>
+                    <br>
+                    <span class="v-bar">사업자등록번호 : 123-45-78912</span><span>통신판매번호 : 제 2022-호주-0044호</span>
+                    <br>
+                    <span class="v-bar">개인정보보호책임 : 주현빈</span><span>호스팅 사업자 : Amazon Web Service(AWS)</span>
+                    <br>
+                    <span class="v-bar">이메일 : pongki@Rupongi</span><span>대표전화번호 : 123-456-789</span>
+                    <br>
+                    <br>
+                    <span>Copyright © 2024 Mucts Inc. All rights reserved.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="width-container">
+            먹츠는 통신판매중개자이며, 통신판매의 당사자가 아닙니다. 파티정보, 구매에 관한 의무와 책임은 판매자에게 있습니다.
+            <br>
+            먹츠는 소비자 보호와 안전거래를 위해 고객센터(manager@buts.co.kr)를 운영하고 있으며, 분쟁이 발생 된 경우 별도의 분쟁처리절차에 의거 분쟁해결 및 청약철회 등이 진행 됩니다.
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('searchAddrButton').addEventListener('click', sample4_execDaumPostcode);
+    
+        function sample4_execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    // 지번 주소를 표시하는 코드
+                    var jibunAddr = data.jibunAddress; // 지번 주소 변수
+                    var extraJibunAddr = ''; // 참고 항목 변수
+    
+                    // 법정동명이 있을 경우 추가한다.
+                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        jibunAddr += ' ' + data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                    if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extraJibunAddr += (extraJibunAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    if (extraJibunAddr !== '') {
+                        jibunAddr += ' (' + extraJibunAddr + ')';
+                    }
+    
+                    // 우편번호와 지번 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById('sample4_postcode').value = data.zonecode;
+                    document.getElementById("sample4_jibunAddress").value = jibunAddr;
+                    document.getElementById("sample4_detailAddress").value = ''; // 상세주소 필드는 사용자가 직접 입력하도록 설정
+    
+                    // 팝업 창 닫기 - Daum API에서 자동으로 처리됩니다.
+                    // data.close(); // 불필요
+                }
+            }).open();
+        }
+    
+        document.getElementById('addressForm').addEventListener('submit', function(event) {
+            // addr_code, addr_jibun, addr_detail 값을 합쳐서 address 필드에 넣기
+            var postcode = document.getElementById('sample4_postcode').value;
+            var jibunAddress = document.getElementById('sample4_jibunAddress').value;
+            var detailAddress = document.getElementById('sample4_detailAddress').value;
+            var fullAddress = postcode + ' ' + jibunAddress + ' ' + detailAddress;
+    
+            document.getElementById('fullAddress').value = fullAddress;
+        });
+    </script>
+</body>
+
+</html>

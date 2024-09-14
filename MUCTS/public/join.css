@@ -1,0 +1,353 @@
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #topper {
+            width: 100%;
+            height: 35px;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #f0eff7;
+        }
+
+        #topper-menu {
+            position: relative;
+            text-align: right;
+            line-height: 34px;
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        #topper-menu>a {
+            display: inline-block;
+            padding: 0 20px;
+            font-size: 12px;
+            color: #888888;
+        }
+
+        #header {
+            width: 100%;
+            height: 100px;
+            background-color: white;
+            border-bottom: 1px solid #ffe655;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        #header-width-container {
+            width: 100%;
+            max-width: 1280px;
+            height: 100px;
+            margin: 0 auto;
+            padding: 0 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #header-logo {
+            display: inline-block;
+        }
+
+        #header-right {
+            display: inline-block;
+            width: 116px;
+            height: 34px;
+            font-size: 16px;
+            color: #ffffff;
+            text-align: center;
+            line-height: 32px;
+            border-radius: 17px;
+            background-color: black;
+        }
+
+        #header-right a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        #main-body {
+            width: 100%;
+            min-height: 600px;
+            padding-top: 100px;
+            /* Adjust for fixed header */
+        }
+
+        #main-width-container {
+            width: 100%;
+            max-width: 1280px;
+            min-height: 600px;
+            margin: 0 auto;
+            padding: 0 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #title-wrap-party {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 90px;
+        }
+
+        #title {
+            font-size: 22px;
+            color: #333333;
+            font-family: 'Noto Sans KR', 'NanumGothic', '나눔고딕', ng, 'Malgun Gothic', Gulim, Dotum, Sans-Serif !important;
+            font-weight: 500;
+        }
+
+        #text-party {
+            color: #7e69fe !important;
+            font-weight: 500;
+        }
+
+        #botton-make-party {
+            color: #7e69fe;
+            border: solid 1px #a89cf4;
+            background-color: #ffffff;
+            padding: 0 16px;
+            font-size: 17px;
+            border-radius: 17px;
+            text-decoration: none;
+        }
+
+        .chat-container {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 24px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 30%;
+            margin-bottom: 35px;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-content {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .card-price {
+            margin-top: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333333;
+        }
+
+        .footer {
+            position: relative;
+            padding: 35px 10px;
+            font-size: 12px;
+            font-weight: 300;
+            color: #333;
+            line-height: 20px;
+            background-color: white;
+            border-top: 1px solid #f0eff7;
+            word-break: keep-all;
+        }
+
+        .width-container {
+            position: relative;
+            width: 100%;
+            max-width: 1280px;
+            height: 100%;
+            margin: 0 auto;
+        }
+
+        .footer .padding-left {
+            position: relative;
+            padding-left: 0px;
+        }
+
+        .footer .v-bar {
+            margin-right: 20px;
+            color: #666666;
+            text-decoration: none;
+            position: relative;
+            display: inline-block;
+        }
+
+        @media all and (max-width: 1200px) {
+            #topper-menu {
+                width: 100%;
+            }
+
+            #header-width-container {
+                width: 100%;
+            }
+
+            #main-width-container {
+                width: 100%;
+                padding: 0 10px;
+            }
+
+            .card {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        @media all and (max-width: 768px) {
+            #topper-menu {
+                text-align: center;
+                line-height: 1.2;
+            }
+
+            #topper-menu>a {
+                display: block;
+                padding: 10px 0;
+            }
+
+            #header-width-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            #header-right {
+                margin-top: 10px;
+            }
+
+            #title-wrap-party {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .chat-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* body css 넣기*/
+        #user_info {
+            padding: 10px 15px;
+            border-radius: 10px;
+            position: relative;
+            border: solid 1px black;
+            display: block;
+            unicode-bidi: isolate;
+        }
+
+        #nick {
+            padding: 10px 15px;
+            position: relative;
+            border: solid 1px black;
+            box-sizing: border-box;
+            display: block;
+            unicode-bidi: isolate;
+            border-radius: 10px;
+        }
+
+        #make_p {
+            padding: 10px 15px;
+            border-radius: 10px;
+            position: relative;
+            border: solid 1px black;
+            box-sizing: border-box;
+            display: block;
+            unicode-bidi: isolate;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            padding-inline-start: 40px;
+            unicode-bidi: isolate;
+        }
+
+        li {
+            min-height: 28px;
+            padding-left: 90px;
+            position: relative;
+            padding: 2px 0 2px 120px;
+            box-sizing: border-box;
+            display: list-item;
+            text-align: -webkit-match-parent;
+            unicode-bidi: isolate;
+        }
+
+        .subject {
+            padding: 10px 15px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: inline-block;
+        }
+
+        #submit {
+            display: inline-block;
+            width: 116px;
+            height: 34px;
+            font-size: 16px;
+            color: #ffffff;
+            text-align: center;
+            line-height: 32px;
+            border-radius: 17px;
+            background-color: black;
+            margin-left: 185px;
+        }
+
+
+        #sample4_roadAddress {
+            margin-top: 16px;
+            margin-left: -1px;
+        }
+
+        #email {
+            margin-left: 50px;
+        }
+
+        #birth_date {
+            margin-left: 34px;
+        }
+
+        #gender {
+            margin-left: 74px;
+        }
+
+        #gender-radio {
+            margin-left: 20px;
+        }
+
+        #tel {
+            margin-left: 50px;
+        }
+
+        #wd_account {
+            margin-left: 65px;
+        }
+
+        #ba_number {
+            margin-left: 33px;
+        }

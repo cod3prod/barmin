@@ -1,0 +1,234 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#header,
+#header-width-container {
+    width: 100%;
+    height: 100px;
+}
+
+#header {
+    background-color: white;
+    border-bottom: 1px solid #ffe655;
+}
+
+#header-width-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#header-logo {
+    display: inline-block;
+}
+#header-logo:hover {
+    transform: scale(1.1);
+}
+
+#header-right {
+    display: inline-block;
+    width: 116px;
+    height: 34px;
+    font-size: 16px;
+    color: #ffffff;
+    text-align: center;
+    line-height: 32px;
+    border-radius: 17px;
+    background-color: black;
+}
+#header-right:hover{
+    background-color: gray;
+}
+#cash_btn,
+#mypage_btn {
+    display: inline-block;
+    width: 116px;
+    height: 34px;
+    text-align: center;
+    line-height: 32px;
+}
+#cash_btn:hover,
+#mypage_btn:hover{
+    /* background-color: gray; */
+    transform: scale(1.1);
+}
+
+#cash_btn a,
+#mypage_btn a {
+    height: 100px;
+    color: black;
+    text-decoration: none;
+    font-size: 20px;
+}
+#mypage_btn{
+    padding-right: 80px;
+}
+#header-right a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.banner {
+    width: 100%;
+    min-height: 600px;
+}
+
+#main-width-container {
+    width: 1280px;
+    min-height: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#title-wrap-party {
+    width: 100%;
+    max-width: 1280px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 90px;
+}
+
+#title-party {
+    width: 100%;
+    max-width: 1280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 36px 0 20px;
+    margin-top: 56px;
+    margin-left: -382px;
+    margin-bottom: 24px;
+    font-size: 22px;
+    color: #333333;
+    line-height: 32px;
+}
+
+#title {
+    font-size: 22px;
+    color: #333333;
+    font-family: 'Noto Sans KR', 'NanumGothic', '나눔고딕', ng, 'Malgun Gothic', Gulim, Dotum, Sans-Serif !important;
+    font-weight: 500;
+}
+
+.footer {
+    position: relative;
+    padding: 35px 0;
+    font-size: 12px;
+    font-weight: 300;
+    color: #333;
+    line-height: 20px;
+    background-color: white;
+    border-top: 1px solid #f0eff7;
+    word-break: keep-all;
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.width-container {
+    max-width: 1280px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+.footer .padding-left {
+    position: relative;
+    padding-left: 0px;
+}
+
+.footer .v-bar {
+    margin-right: 20px;
+    color: #666666;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+}
+
+.text-purple {
+    color: black;
+    font-size: 35px;
+    /* width: 500px; */
+    /* margin-left: 7%; */
+}
+
+.partner-fomr-list.border .subject {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 120px;
+    height: 46px;
+    padding: 14px 0 13px;
+}
+
+.form-list.border .subject {
+    width: 120px;
+    padding: 14px 0 13px 0;
+    text-indent: -5px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.form-group>input{
+    /* height: 75px; */
+    border-radius: 10px;
+    width: 100%;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5em;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+button {
+    width: 500px;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#start_date,
+#end_date {
+    width: 92px;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#submit {
+    display: inline-block;
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    color: #ffffff;
+    text-align: center;
+    line-height: 18px;
+    border-radius: 17px;
+    background-color: black;
+    /* margin-left: 185px; */
+}
+#submit:hover{
+    background-color: gray;
+}

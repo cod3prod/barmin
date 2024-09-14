@@ -1,0 +1,87 @@
+/* body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+} */
+/* .container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: auto;
+} */
+h2 {
+    text-align: center;
+    color: #333;
+}
+.section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    /* 버튼 정렬을 위해서 부모요소 추가 */
+    /* display: inline-flex; */
+    justify-content: center;
+}
+.input-group {
+    margin-bottom: 15px;
+}
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+.input-group input, .input-group select {
+    width: 95%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.input-btn{
+    justify-content: center; /*버튼을 수평으로 가운데 정렬*/
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+
+
+.cancel_button {
+    color: white;
+    /* float: right; 화면의 오른쪽으로 띄우는 명령어. */
+
+    display: inline-block;
+    padding: 10px 20px;
+    /* margin-top: 10px; */
+    background-color: black;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+}
+.cancel_button:hover {
+    background-color: gray;
+}
+
+
+
+#changeInfo_btn2{
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    /* 추가css */
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: black;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    cursor:pointer;
+}
+#changeInfo_btn2:hover,
+#changeInfo_btn2:focus{
+    color: gray;
+    /* text-decoration: none; */
+    /* cursor: pointer; */
+}
