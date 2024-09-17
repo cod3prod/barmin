@@ -21,7 +21,7 @@ export default function Navbar() {
                 로그인
             </NavLink>
             <NavLink
-                to = "/signup"
+                to = "/register"
                 end
             >
                 회원가입
