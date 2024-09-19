@@ -6,6 +6,7 @@ import initializePassport from './config/passport.js';
 import connectDB from './config/database.js';
 import { port, SESSION_SECRET } from './config/config.js';
 import userRoutes from './routes/users.js';
+import locationRoutes from './routes/locations.js';
 
 connectDB();
 
@@ -27,6 +28,7 @@ app.use(cors({
 }));
 
 app.use('/', userRoutes);
+app.use('/locations', locationRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

@@ -7,8 +7,8 @@ const register = async (req, res, next) => {
         const { email, username, password} = req.body;
         const user = new User({email, username});
         const registeredUser = await User.register(user, password)
-        // const { _id } = registeredUser;
-        const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
+        const { _id } = registeredUser;
+        const token = jwt.sign({ _id, username }, JWT_SECRET, { expiresIn: '1h' });
         req.login(registeredUser, err => {
             if (err) {
                 return next(err);
@@ -24,8 +24,8 @@ const register = async (req, res, next) => {
 };
 
 const login = (req, res) => {
-    const { username } = req.body;
-    const token = jwt.sign({ username }, JWT_SECRET, { expiresIn : '1h'});
+    const { _id, username } = req.user
+    const token = jwt.sign({ _id, username }, JWT_SECRET, { expiresIn : '1h'});
     res.json({ success: true, message: "환영합니다", token});
 }
 

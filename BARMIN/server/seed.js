@@ -1,19 +1,15 @@
 import mongoose from 'mongoose';
-import Location from '../models/location.js'; 
-import Review from '../models/review.js';
-import User from '../models/user.js';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
+import Location from './models/location.js'; 
+import Review from './models/review.js';
+import User from './models/user.js';
+import { DB_URL } from './config/config.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.join(__dirname, '../.env') });
+console.log(DB_URL);
 
 // MongoDB 연결
-mongoose.connect(process.env.DB_URL)
+mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("seeding을 위한 MongoDB 연결 성공!"))
-    .catch(err => console.log("seeding을 위한 MongoDB 연결 실패:", err, process.env.DB_URL));
+    .catch(err => console.log("seeding을 위한 MongoDB 연결 실패:", err));
 
 // 시드 데이터
 const seedUsers = [
@@ -69,32 +65,38 @@ const seedLocations = [
 
 // 데이터 추가 함수
 const seedDB = async () => {
-    // 기존 데이터 삭제
-    await Location.deleteMany({});
-    await Review.deleteMany({});
-    await User.deleteMany({});
+    try {
+        // 기존 데이터 삭제
+        await Location.deleteMany({});
+        await Review.deleteMany({});
+        await User.deleteMany({});
 
-    // 유저 추가
-    const users = await User.insertMany(seedUsers);
+        // 유저 추가
+        const users = await User.insertMany(seedUsers);
 
-    // 리뷰 작성자 설정
-    seedReviews[0].author = users[0]._id;
-    seedReviews[1].author = users[1]._id;
-    seedReviews[2].author = users[2]._id;
+        // 리뷰 작성자 설정
+        seedReviews[0].author = users[0]._id;
+        seedReviews[1].author = users[1]._id;
+        seedReviews[2].author = users[2]._id;
 
-    // 리뷰 추가
-    const reviews = await Review.insertMany(seedReviews);
+        // 리뷰 추가
+        const reviews = await Review.insertMany(seedReviews);
 
-    // 위치 데이터에 리뷰 추가
-    seedLocations[0].reviews = [reviews[0]._id];
-    seedLocations[1].reviews = [reviews[1]._id];
-    seedLocations[2].reviews = [reviews[2]._id];
+        // 위치 데이터에 리뷰 추가
+        seedLocations[0].reviews = [reviews[0]._id];
+        seedLocations[1].reviews = [reviews[1]._id];
+        seedLocations[2].reviews = [reviews[2]._id];
 
-    // 위치 데이터 추가
-    await Location.insertMany(seedLocations);
+        // 위치 데이터 추가
+        await Location.insertMany(seedLocations);
 
-    console.log("DB 시딩 완료!");
+        console.log("DB 시딩 완료!");
+    } catch (err) {
+        console.error("DB 시딩 중 에러 발생:", err);
+    } finally {
+        mongoose.connection.close();
+    }
 };
 
-// 시딩 후 mongoose 연결 종료
-seedDB().then(() => mongoose.connection.close());
+// 시딩 실행
+seedDB();
