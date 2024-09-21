@@ -1,39 +1,36 @@
 import { NavLink } from "react-router-dom";
-import { useAuth } from '../contexts/AuthContext';
 
 export default function Navbar() {
-    const { isLoggedIn, logout } = useAuth();
 
-    return (
-        <nav>
-            <NavLink
-                to = "/"
-                end
-            >
-                홈
-            </NavLink>
-            <NavLink
-                to = "/locations"
-            >
-                장소 목록
-            </NavLink>
-            {isLoggedIn ? (
-                <button onClick={logout}>로그아웃</button>
-            ) : (
-                <>
-                <NavLink to="/login" end>
-                    로그인
-                </NavLink>
-                <NavLink to="/register" end>
-                    회원가입
-                </NavLink>
-                </>
-            )}
-            <NavLink
-                to = "/profile"
-            >
-                프로필
-            </NavLink>
-        </nav>    
-    )
+  return (
+    <nav className="sticky top-0 bg-gray-800 text-white">
+      <div className="container mx-auto flex justify-between items-center p-4">
+        <NavLink className="text-xl font-bold" to="/">
+          BARMIN
+        </NavLink>
+        <button className="lg:hidden focus:outline-none">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5"
+            />
+          </svg>
+        </button>
+        <div className="hidden lg:flex space-x-4">
+          <NavLink to="/locations" end>
+            BARS
+          </NavLink>
+          <NavLink to="/locations/new">NEW BARS</NavLink>
+        </div>
+      </div>
+    </nav>
+  );
 }

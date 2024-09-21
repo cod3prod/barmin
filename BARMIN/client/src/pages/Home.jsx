@@ -1,4 +1,5 @@
-import Navbar from "../components/Navbar";
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import { useNavigate } from "react-router-dom";
 
 function Landing() {
@@ -20,12 +21,12 @@ function Landing() {
   )
 }
 
-export default function Index() {
+export default function Home() {
   return (
     <>
       <Navbar />
       <Landing />
+      <Footer />
     </>
-    
   )
 }

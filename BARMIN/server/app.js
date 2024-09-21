@@ -1,35 +1,58 @@
 import express from 'express';
-import session from 'express-session';
+import mongoose from 'mongoose';
 import cors from 'cors';
-import passport from 'passport';
-import initializePassport from './config/passport.js';
-import connectDB from './config/database.js';
-import { port, SESSION_SECRET } from './config/config.js';
-import userRoutes from './routes/users.js';
-import locationRoutes from './routes/locations.js';
+import Location from './models/location.js';
+import { port, DB_URL } from './config/config.js';
 
-connectDB();
+mongoose.connect(DB_URL)
+    .then(()=>{
+        console.log('MongoDB 연결 성공');
+    })
+    .catch((err)=>{
+        console.error('MongoDB 연결 실패', err);
+    });
 
 const app = express();
 
-app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-app.use(session({
-  secret: SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-}));
-app.use(passport.initialize());
-app.use(passport.session());
-initializePassport(passport);
+app.use(express.json());
 
-app.use(cors({
-  origin: 'http://localhost:5173',
-}));
-
-app.use('/', userRoutes);
-app.use('/locations', locationRoutes);
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.get('/locations', async (req, res)=>{
+    const locations = await Location.find({});
+    res.json(locations);
 });
+
+app.post('/locations', async (req, res)=>{
+    const location = new Location(req.body);
+    await location.save();
+    res.json({success:true, redirect:location._id});
+})
+
+app.get('/locations/:id', async (req, res)=>{
+    const location = await Location.findById(req.params.id);
+    res.json(location); 
+})
+
+app.get('/locations/:id/edit', async (req, res)=>{
+    const location = await Location.findById(req.params.id);
+    res.json(location); 
+})
+
+app.put('/locations/:id', async (req, res)=>{
+    const { id } = req.params;
+    await Location.findByIdAndUpdate(id, {
+        ...req.body
+    })
+    res.json({success:true});
+})
+
+app.delete('/locations/:id', async (req, res)=>{
+    const { id } = req.params;
+    await Location.findByIdAndDelete(id);
+    res.json({success:true});
+})
+
+app.listen(port, ()=>{
+    console.log(`Serving on port ${port}`);
+})

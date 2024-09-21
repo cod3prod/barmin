@@ -34,3 +34,4 @@ yarn.lock
 *.swo
 *.swn
 *.tmp
+seeds/
