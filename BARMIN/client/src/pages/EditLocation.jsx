@@ -50,6 +50,8 @@ export default function EditLocation() {
   const fetcher = useFetcher();
   const [title, setTitle] = useState(data.title);
   const [location, setLocation] = useState(data.location);
+  const [image, setImage] = useState(data.image);
+  const [description, setDescription] = useState(data.description);
 
   return (
     <>
@@ -59,24 +61,36 @@ export default function EditLocation() {
       <div className="max-w-md mx-auto">
         <fetcher.Form method="put">
           <InputField
-            label="Title"
+            label="제목"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
           <InputField
-            label="Location"
+            label="장소"
             id="location"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
           />
+          <InputField
+            label="이미지"
+            id="image"
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+          />
+          <InputField
+            label="설명"
+            id="textarea"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
           <div className="mb-4">
-            <button className="bg-blue-500 text-white p-2 rounded">
-              수정
-            </button>
+            <button className="bg-blue-500 text-white p-2 rounded">수정</button>
           </div>
         </fetcher.Form>
-        <a href={`/locations/${data._id}`} className="text-blue-500">돌아가기</a>
+        <a href={`/locations/${data._id}`} className="text-blue-500">
+          돌아가기
+        </a>
       </div>
     </>
   );
