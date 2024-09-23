@@ -1,6 +1,12 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 export default function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  function toggleMenu(){
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
     <nav className="sticky top-0 bg-gray-800 text-white">
@@ -8,7 +14,7 @@ export default function Navbar() {
         <NavLink className="text-xl font-bold" to="/">
           BARMIN
         </NavLink>
-        <button className="lg:hidden focus:outline-none">
+        <button className="lg:hidden focus:outline-none" onClick={toggleMenu}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -31,6 +37,18 @@ export default function Navbar() {
           <NavLink to="/locations/new">NEW BARS</NavLink>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="lg:hidden bg-gray-800 p-4">
+          <NavLink to="/locations" className="block py-2">
+            BARS
+          </NavLink>
+          <NavLink to="/locations/new" className="block py-2">
+            NEW BARS
+          </NavLink>
+        </div>
+      )}
     </nav>
   );
 }

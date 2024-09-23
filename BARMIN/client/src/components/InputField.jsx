@@ -1,4 +1,10 @@
-export default function InputField({ label, type="text", id, value, onChange = ()=>{} }) {
+export default function InputField({
+  label,
+  type = "text",
+  id,
+  value,
+  onChange = () => {},
+}) {
   return (
     <div className="mb-4">
       <label className="block text-gray-700" htmlFor={id}>
