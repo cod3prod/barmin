@@ -9,6 +9,9 @@ export default function ReviewForm({ locationId }) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const formValues = Object.fromEntries(formData);
+    console.log(formValues);
+    formValues.rating = parseInt(formValues.rating);
+    console.log(formValues);
     await axios.post(`http://localhost:3000/locations/${locationId}/reviews`, formValues)
       .then(res => {
         event.target.reset();
