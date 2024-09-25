@@ -4,9 +4,9 @@ import { NavLink } from "react-router-dom";
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  function toggleMenu(){
+  function toggleMenu() {
     setIsMenuOpen(!isMenuOpen);
-  };
+  }
 
   return (
     <nav className="sticky top-0 bg-gray-800 text-white">
@@ -35,6 +35,8 @@ export default function Navbar() {
             BARS
           </NavLink>
           <NavLink to="/locations/new">NEW BARS</NavLink>
+          <NavLink to="/login">login</NavLink>
+          <NavLink to="/register">register</NavLink>
         </div>
       </div>
 
@@ -46,6 +48,12 @@ export default function Navbar() {
           </NavLink>
           <NavLink to="/locations/new" className="block py-2">
             NEW BARS
+          </NavLink>
+          <NavLink to="/login" className="block py-2">
+            login
+          </NavLink>
+          <NavLink to="/register" className="block py-2">
+            register
           </NavLink>
         </div>
       )}

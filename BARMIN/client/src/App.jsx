@@ -5,6 +5,8 @@ import LocationsList, { loader as locationsListLoader } from "./pages/LocationsL
 import LocationDetail, { loader as locationLoader } from "./pages/LocationDetail/index";
 import NewLocation, { action as locationAction } from "./pages/NewLocation";
 import EditLocation, { loader as editLocationLoader, action as editLocationAction } from "./pages/EditLocation";
+import Register, {action as registerAction } from "./pages/Register";
+import Login, {action as loginAction } from "./pages/Login";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +16,16 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Home />,
+      },
+      {
+        path: '/register',
+        element: <Register />,
+        action: registerAction,
+      },
+      {
+        path: '/login',
+        element: <Login />,
+        action: loginAction,
       },
       {
         path: '/locations',

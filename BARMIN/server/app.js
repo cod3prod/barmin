@@ -1,15 +1,15 @@
 import express from "express";
 import mongoose from "mongoose";
-
 import AppError from "./utils/AppError.js";
-
 import cors from "cors";
-
-import { port, DB_URL } from "./config/config.js";
-
-
-import locations from './routes/locations.js';
-import reviews from './routes/reviews.js';
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import User from "./models/user.js";
+import session from "express-session";
+import { port, DB_URL, SESSION_SECRET } from "./config/config.js";
+import userRoutes from './routes/users.js';
+import locationRoutes from "./routes/locations.js";
+import reviewRoutes from "./routes/reviews.js";
 
 mongoose
   .connect(DB_URL)
@@ -26,65 +26,28 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+const sessionConfig = {
+  secret: SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+};
+app.use(session(sessionConfig));
 
-app.use('/locations', locations);
-app.use('/locations/:id/reviews', reviews);
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
-// app.get(
-//   "/locations",
-//   wrapAsync(async (req, res) => {
-//     const locations = await Location.find({});
-//     res.json(locations);
-//   })
-// );
 
-// app.post(
-//   "/locations",
-//   validateLocation,
-//   wrapAsync(async (req, res) => {
-//     const location = new Location(req.body);
-//     await location.save();
-//     res.json({ success: true, redirect: location._id });
-//   })
-// );
-
-// app.get(
-//   "/locations/:id",
-//   wrapAsync(async (req, res) => {
-//     const location = await Location.findById(req.params.id).populate("reviews");
-//     res.json(location);
-//   })
-// );
-
-// app.get(
-//   "/locations/:id/edit",
-//   wrapAsync(async (req, res) => {
-//     const location = await Location.findById(req.params.id);
-//     res.json(location);
-//   })
-// );
-
-// app.put(
-//   "/locations/:id",
-//   validateLocation,
-//   wrapAsync(async (req, res) => {
-//     const { id } = req.params;
-//     await Location.findByIdAndUpdate(id, {
-//       ...req.body,
-//     });
-//     res.json({ success: true });
-//   })
-// );
-
-// app.delete(
-//   "/locations/:id",
-//   wrapAsync(async (req, res) => {
-//     const { id } = req.params;
-//     await Location.findByIdAndDelete(id);
-//     res.json({ success: true });
-//   })
-// );
-
+app.use("/", userRoutes)
+app.use("/locations", locationRoutes);
+app.use("/locations/:id/reviews", reviewRoutes);
 
 app.all("*", (req, res, next) => {
   next(new AppError("Page Not Found", 404));
