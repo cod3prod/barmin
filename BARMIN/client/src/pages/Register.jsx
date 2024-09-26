@@ -17,6 +17,7 @@ export async function action({ request }) {
   const result = response.data;
   console.log(result);
   if (result.success) {
+    localStorage.setItem("token", result.token);
     return redirect(`/locations`);
   }
   return redirect('/register');
