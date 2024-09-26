@@ -5,7 +5,12 @@ export default function LocationCard({ data }) {
   const navigate = useNavigate();
 
   async function handleClick(){
-    axios.delete(`http://localhost:3000/locations/${data._id}`)
+    const token = localStorage.getItem('token');
+    axios.delete(`http://localhost:3000/locations/${data._id}`, {
+      headers : {
+        "Authorization": `Bearer ${token}`,
+      }
+    })
       .then(res => {
         console.log(res.data);
         navigate('/locations');

@@ -2,12 +2,13 @@ import express from "express";
 import Location from "../models/location.js";
 import Review from "../models/review.js";
 import wrapAsync from "../utils/wrapAsync.js";
-import { validateReview } from "../middlewares.js";
+import { validateReview, authenticateToken, isReviewAuthor } from "../middlewares.js";
 
 const router = express.Router({ mergeParams: true });
 
 router.post(
   "/",
+  authenticateToken,
   validateReview,
   wrapAsync(async (req, res) => {
     const location = await Location.findById(req.params.id);
@@ -21,6 +22,8 @@ router.post(
 
 router.delete(
   "/:reviewId",
+  authenticateToken,
+  isReviewAuthor,
   wrapAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     await Location.findByIdAndUpdate(id, {

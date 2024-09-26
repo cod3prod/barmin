@@ -1,5 +1,6 @@
 import { useFetcher, useNavigate } from "react-router-dom";
-import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 export default function ReviewForm({ locationId }) {
   const fetcher = useFetcher();
@@ -7,20 +8,31 @@ export default function ReviewForm({ locationId }) {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    const token = localStorage.getItem('token');
+    const decoded = jwtDecode(token);
     const formData = new FormData(event.target);
     const formValues = Object.fromEntries(formData);
-    console.log(formValues);
+    formValues.author = decoded._id;
     formValues.rating = parseInt(formValues.rating);
-    console.log(formValues);
-    await axios.post(`http://localhost:3000/locations/${locationId}/reviews`, formValues)
-      .then(res => {
+
+    await axios
+      .post(
+        `http://localhost:3000/locations/${locationId}/reviews`,
+        formValues,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
         event.target.reset();
         event.target.rating.value = 5;
         navigate(`/locations/${locationId}`);
       })
-      .catch(err => {
-        console.error('리뷰 작성 실패', err);
-      })
+      .catch((err) => {
+        console.error("리뷰 작성 실패", err);
+      });
   }
 
   return (

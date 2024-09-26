@@ -1,17 +1,21 @@
 import { useFetcher, redirect } from "react-router-dom";
 import axios from "axios";
+import { jwtDecode } from 'jwt-decode'; 
 import InputField from "../components/InputField";
 
 export async function action({ request }) {
+  const token = localStorage.getItem('token');
+  const decoded =jwtDecode(token);
   const formData = await request.formData();
-  const postData = Object.fromEntries(formData);
-  console.log(formData);
+  const formValues = Object.fromEntries(formData);
+  formValues.author = decoded._id;
   const response = await axios.post(
     "http://localhost:3000/locations",
-    postData,
+    formValues,
     {
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
     }
   );

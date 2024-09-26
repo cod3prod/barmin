@@ -18,7 +18,7 @@ router.post(
         req.login(registeredUser, (err) => {
           if (err) return next(err);
           const token = jwt.sign(
-            { username: username },
+            { _id: user._id, username: username },
             JWT_SECRET,
             { expiresIn: "2h" }
           );
@@ -34,7 +34,7 @@ router.post(
 router.post("/login", passport.authenticate("local"), (req, res) => {
   const user = req.user;
   const token = jwt.sign(
-    { username: user.username },
+    { _id: user._id, username: user.username },
     JWT_SECRET,
     { expiresIn: "2h" }
   );

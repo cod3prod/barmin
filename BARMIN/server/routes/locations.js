@@ -1,7 +1,7 @@
 import express from "express";
 import Location from "../models/location.js";
 import wrapAsync from "../utils/wrapAsync.js";
-import { validateLocation } from "../middlewares.js";
+import { validateLocation, authenticateToken, isAuthor } from "../middlewares.js";
 
 const router = express.Router({ mergeParams: true });
 
@@ -14,6 +14,7 @@ router
     })
   )
   .post(
+    authenticateToken,
     validateLocation,
     wrapAsync(async (req, res) => {
       const location = new Location(req.body);
@@ -33,6 +34,8 @@ router
     })
   )
   .put(
+    authenticateToken,
+    isAuthor,
     validateLocation,
     wrapAsync(async (req, res) => {
       const { id } = req.params;
@@ -43,6 +46,8 @@ router
     })
   )
   .delete(
+    authenticateToken,
+    isAuthor,
     wrapAsync(async (req, res) => {
       const { id } = req.params;
       await Location.findByIdAndDelete(id);

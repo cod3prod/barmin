@@ -5,9 +5,16 @@ export default function ReviewItem({ review, locationId }) {
   const navigate = useNavigate();
 
   async function handleClick() {
+    const token = localStorage.getItem('token');
+
     await axios
       .delete(
-        `http://localhost:3000/locations/${locationId}/reviews/${review._id}`
+        `http://localhost:3000/locations/${locationId}/reviews/${review._id}`,
+        {
+          headers : {
+            Authorization:`Bearer ${token}`
+          }
+        }
       )
       .then((res) => {
         console.log("리뷰 삭제", res.data);
