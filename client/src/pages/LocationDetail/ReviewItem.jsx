@@ -1,19 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Button from "../../components/Button";
 
 export default function ReviewItem({ review, locationId }) {
   const navigate = useNavigate();
 
   async function handleClick() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     await axios
       .delete(
         `http://localhost:3000/locations/${locationId}/reviews/${review._id}`,
         {
-          headers : {
-            Authorization:`Bearer ${token}`
-          }
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       )
       .then((res) => {
@@ -31,12 +32,12 @@ export default function ReviewItem({ review, locationId }) {
         <h5 className="font-bold">Rating: {review.rating}</h5>
         <p className="text-gray-700">Review: {review.body}</p>
 
-        <button
+        <Button
           onClick={handleClick}
-          className="bg-red-500 text-white py-1 px-3 rounded"
+          className="bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300"
         >
-          Delete
-        </button>
+          삭제
+        </Button>
       </div>
     </div>
   );

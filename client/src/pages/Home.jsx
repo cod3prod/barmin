@@ -1,7 +1,6 @@
-import { useNavigate } from "react-router-dom";
+import NavButton from "../components/NavButton";
 
-function Landing() {
-  const navigate = useNavigate();
+export default function Home() {
   return (
     <div className="text-center">
       <h1 className="text-4xl font-bold tracking-tighter text-gray-900 sm:text-6xl">
@@ -10,18 +9,12 @@ function Landing() {
       <p className="mt-6 mb-6 text-lg leading-8 text-gray-600">
         운동을 더 쉽게, 더 가까이.
       </p>
-      <button
-        className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        onClick={() => {
-          navigate("/locations");
-        }}
+      <NavButton
+        className="text-white bg-purple-600 hover:bg-purple-700 focus:ring-4 focus:ring-purple-300"
+        to="/locations"
       >
         시작하기
-      </button>
+      </NavButton>
     </div>
   );
-}
-
-export default function Home() {
-  return <Landing />;
 }

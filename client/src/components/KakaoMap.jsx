@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import useKakaoLoader from "../config/use-kakao-loader.js";
+import { twMerge } from "tailwind-merge";
 
 export default function KakaoMap(props) {
   useKakaoLoader();
+  const {className, ...rest} = props;
   const [center, setCenter] = useState({ lat: 33.5563, lng: 126.79581 });
   const [position, setPosition] = useState();
   const { title } = props;
@@ -28,7 +30,7 @@ export default function KakaoMap(props) {
   }
   return (
     <Map
-      className="rounded-lg"
+      className={twMerge(className)}
       id="map"
       center={center}
       style={{ width: "100%", height: "360px" }}

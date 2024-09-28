@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useFetcher, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import Textarea from "../../components/Textarea";
+import Button from "../../components/Button";
 
 export default function ReviewForm({ locationId }) {
   const [star, setStar] = useState(0);
@@ -38,19 +40,25 @@ export default function ReviewForm({ locationId }) {
       });
   }
 
-
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">리뷰 작성</h2>
       <fetcher.Form onSubmit={handleSubmit} className="mb-3 space-y-4">
         <div>
           <label htmlFor="rating">평점</label>
-          <div className='flex'>
+          <div className="flex">
             {new Array(5).fill(null).map((_, idx) => (
               <img
-                onMouseEnter={()=>{setStar(idx+1)}}
-                onMouseLeave={()=>{setStar(prevStar)}}
-                onClick={()=>{setStar(idx+1); setPrevStar(idx+1); }}
+                onMouseEnter={() => {
+                  setStar(idx + 1);
+                }}
+                onMouseLeave={() => {
+                  setStar(prevStar);
+                }}
+                onClick={() => {
+                  setStar(idx + 1);
+                  setPrevStar(idx + 1);
+                }}
                 className="w-10 h-10 cursor-pointer"
                 src={star >= idx + 1 ? "/star-filled.svg" : "/star-hollow.svg"}
                 alt={star >= idx + 1 ? "star-filled" : "star-hollow"}
@@ -68,20 +76,13 @@ export default function ReviewForm({ locationId }) {
           />
         </div>
         <div>
-          <label htmlFor="body">리뷰</label>
-          <textarea
-            className="w-full border border-gray-300 p-2 rounded"
-            name="body"
-            id="body"
-            cols="30"
-            rows="3"
-            required
-          ></textarea>
-          <div className="text-purple-500 mt-2">Looks good!</div>
+          <Textarea id="body" rows="3" required>
+            리뷰
+          </Textarea>
         </div>
-        <button className="bg-green-500 text-white py-2 px-4 rounded">
+        <Button className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300">
           완료
-        </button>
+        </Button>
       </fetcher.Form>
     </div>
   );

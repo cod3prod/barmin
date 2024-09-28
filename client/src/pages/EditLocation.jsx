@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useFetcher, redirect, useLoaderData } from "react-router-dom";
 import axios from "axios";
+import Input from "../components/Input";
+import Textarea from "../components/Textarea";
+import Button from "../components/Button";
+import NavButton from "../components/NavButton";
 
 export async function loader({ params }) {
   const { id } = params;
@@ -27,24 +31,6 @@ export async function action({ request, params }) {
   }
 }
 
-function InputField({ label, id, value, onChange }) {
-  return (
-    <div className="mb-4">
-      <label className="block text-gray-700" htmlFor={id}>
-        {label}
-      </label>
-      <input
-        className="border border-gray-300 p-2 w-full"
-        onChange={onChange}
-        type="text"
-        id={id}
-        name={id}
-        value={value}
-      />
-    </div>
-  );
-}
-
 export default function EditLocation() {
   const data = useLoaderData();
   const fetcher = useFetcher();
@@ -58,39 +44,44 @@ export default function EditLocation() {
       <div className="flex justify-center">
         <h1 className="text-3xl text-center">장소 정보 편집</h1>
       </div>
-      <div className="max-w-md mx-auto">
+      <div className=" max-w-md mx-auto">
         <fetcher.Form method="put">
-          <InputField
-            label="제목"
+          <Input
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-          />
-          <InputField
-            label="장소"
+          >
+            제목
+          </Input>
+          <Input
             id="location"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-          />
-          <InputField
-            label="이미지"
+          >
+            장소
+          </Input>
+          <Input
             id="image"
             value={image}
             onChange={(e) => setImage(e.target.value)}
-          />
-          <InputField
-            label="설명"
+          >
+            이미지
+          </Input>
+          <Textarea
+            rows="10"
             id="textarea"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-          />
-          <div className="mb-4">
-            <button className="bg-blue-500 text-white p-2 rounded">수정</button>
+          >
+            설명
+          </Textarea>
+          <div className="mt-4 flex justify-between mb-4">
+            <Button className="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300">
+              수정
+            </Button>
+            <NavButton to={`/locations/${data._id}`}>돌아가기</NavButton>
           </div>
         </fetcher.Form>
-        <a href={`/locations/${data._id}`} className="text-blue-500">
-          돌아가기
-        </a>
       </div>
     </>
   );

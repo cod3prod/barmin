@@ -1,6 +1,8 @@
 import { useFetcher, redirect } from "react-router-dom";
 import { authStore } from "../zustand/AuthStore";
 import axios from "axios";
+import Input from "../components/Input";
+import Button from "../components/Button";
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -32,47 +34,15 @@ export default function Login() {
     <div className="max-w-md mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">Login</h1>
       <fetcher.Form method="POST" className="space-y-4" noValidate>
-        <div>
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="username"
-          >
-            Username
-          </label>
-          <input
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-300"
-            type="text"
-            id="username"
-            name="username"
-            required
-          />
-          <div className="text-green-600 mt-1 hidden" id="username-feedback">
-            Looks good!
-          </div>
-        </div>
-
-        <div>
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="password"
-          >
-            Password
-          </label>
-          <input
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-300"
-            type="password"
-            id="password"
-            name="password"
-            required
-          />
-          <div className="text-green-600 mt-1 hidden" id="password-feedback">
-            Looks good!
-          </div>
-        </div>
-
-        <button className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700">
+        <Input type="text" id="username" required>
+          Username
+        </Input>
+        <Input type="password" id="password" required>
+          Password
+        </Input>
+        <Button className="text-lg w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600">
           Login
-        </button>
+        </Button>
       </fetcher.Form>
     </div>
   );

@@ -42,16 +42,16 @@ export default function Navbar() {
         </button>
         <div className="hidden lg:flex space-x-4">
           <NavLink to="/locations" end>
-            BARS
+            리스트 보기
           </NavLink>
-          <NavLink to="/locations/new">NEW BARS</NavLink>
+          <NavLink to="/locations/new">새로운 장소</NavLink>
           {!username ? (
             <>
-              <NavLink to="/login">login</NavLink>
-              <NavLink to="/register">register</NavLink>
+              <NavLink to="/login">로그인</NavLink>
+              <NavLink to="/register">가입</NavLink>
             </>
           ) : (
-            <NavLink to="locations">logout</NavLink>
+            <NavLink to="locations">로그아웃</NavLink>
           )}
         </div>
       </div>
@@ -60,19 +60,19 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="lg:hidden bg-gray-800 p-4">
           <NavLink onClick={closeMenu} to="/locations" className="block py-2">
-            BARS
+            리스트 보기
           </NavLink>
           <NavLink onClick={closeMenu} to="/locations/new" className="block py-2">
-            NEW BARS
+            새로운 장소
           </NavLink>
 
           {!username ? (
             <>
               <NavLink onClick={closeMenu} to="/login" className="block py-2">
-                login
+                로그인
               </NavLink>
               <NavLink onClick={closeMenu} to="/register" className="block py-2">
-                register
+                가입
               </NavLink>
             </>
           ) : (
@@ -80,7 +80,7 @@ export default function Navbar() {
               handleClick(e);
               closeMenu();
               }} to="/locations" className="block py-2">
-              logout
+              로그아웃
             </NavLink>
           )}
         </div>
