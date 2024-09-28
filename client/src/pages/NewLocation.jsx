@@ -2,6 +2,7 @@ import { useFetcher, redirect } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from 'jwt-decode'; 
 import InputField from "../components/InputField";
+import KakaoMap from "../components/KakaoMap";
 
 export async function action({ request }) {
   const token = localStorage.getItem('token');
@@ -36,6 +37,7 @@ export default function NewLocation() {
         <h1 className="text-3xl text-center">New Location</h1>
       </div>
       <div className="max-w-md mx-auto">
+        <KakaoMap />
         <fetcher.Form method="post">
           <InputField label="제목" id="title" />
           <InputField label="장소" id="location" />

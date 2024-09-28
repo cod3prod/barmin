@@ -18,11 +18,11 @@ export async function action({ request }) {
   const result = response.data;
 
   if (result.success) {
-    localStorage.setItem('token', result.token);
-    authStore.setState({username: formValues.username});;
-    return redirect(`/locations`);
+    localStorage.setItem("token", result.token);
+    authStore.setState({ username: formValues.username });
+    return redirect("/locations");
   }
-  return redirect('/login');
+  return redirect("/login");
 }
 
 export default function Login() {

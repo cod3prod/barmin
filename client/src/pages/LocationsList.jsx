@@ -1,4 +1,5 @@
 import { useLoaderData } from "react-router-dom";
+import KakaoMap from "../components/KakaoMap";
 import axios from "axios";
 
 export async function loader() {
@@ -13,6 +14,7 @@ export default function LocationsList() {
 
   return (
     <div className="container mx-auto">
+      <KakaoMap />
       <a
         className="bg-green-500 text-white py-2 px-4 rounded mb-4 inline-block"
         href="/locations/new"
