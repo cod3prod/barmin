@@ -10,6 +10,10 @@ router.post("/register", validateUser, wrapAsync(users.register));
 
 router.post("/login", passport.authenticate("local"), users.login);
 
+<<<<<<< HEAD
 router.get("/logout", users.logout);
+=======
+router.get("/logout", users.logout);a
+>>>>>>> 541d5f27caace0cc84817f1a4203beb4cd966ac5
 
 export default router;
