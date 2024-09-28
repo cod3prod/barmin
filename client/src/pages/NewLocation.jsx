@@ -37,7 +37,7 @@ export default function NewLocation() {
         <h1 className="text-3xl text-center">New Location</h1>
       </div>
       <div className="max-w-md mx-auto">
-        <KakaoMap />
+        <KakaoMap title={"test"}/>
         <fetcher.Form method="post">
           <InputField label="제목" id="title" />
           <InputField label="장소" id="location" />
