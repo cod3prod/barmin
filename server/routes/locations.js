@@ -1,65 +1,40 @@
 import express from "express";
-import Location from "../models/location.js";
 import wrapAsync from "../utils/wrapAsync.js";
 import { validateLocation, authenticateToken, isAuthor } from "../middlewares.js";
+import locations from '../controllers/locations.js'
 
 const router = express.Router({ mergeParams: true });
 
 router
   .route("/")
   .get(
-    wrapAsync(async (req, res) => {
-      const locations = await Location.find({});
-      res.json(locations);
-    })
+    wrapAsync(locations.getAll)
   )
   .post(
     authenticateToken,
     validateLocation,
-    wrapAsync(async (req, res) => {
-      const location = new Location(req.body);
-      await location.save();
-      res.json({ success: true, redirect: location._id });
-    })
+    wrapAsync(locations.create)
   );
 
 router
   .route("/:id")
   .get(
-    wrapAsync(async (req, res) => {
-      const location = await Location.findById(req.params.id).populate(
-        "reviews"
-      );
-      res.json(location);
-    })
+    wrapAsync(locations.getWithReviews)
   )
   .put(
     authenticateToken,
     isAuthor,
     validateLocation,
-    wrapAsync(async (req, res) => {
-      const { id } = req.params;
-      await Location.findByIdAndUpdate(id, {
-        ...req.body,
-      });
-      res.json({ success: true });
-    })
+    wrapAsync(locations.update)
   )
   .delete(
     authenticateToken,
     isAuthor,
-    wrapAsync(async (req, res) => {
-      const { id } = req.params;
-      await Location.findByIdAndDelete(id);
-      res.json({ success: true });
-    })
+    wrapAsync(locations.remove)
   );
 
 router.get(
   "/:id/edit",
-  wrapAsync(async (req, res) => {
-    const location = await Location.findById(req.params.id);
-    res.json(location);
-  })
+  wrapAsync(locations.getDetails)
 );
 export default router;
