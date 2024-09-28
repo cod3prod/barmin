@@ -38,7 +38,7 @@ export default function Register() {
           Username
         </Input>
         <Input type="email" id="email" required>
-          Username
+          Email
         </Input>
         <Input type="password" id="password" required>
           Password
