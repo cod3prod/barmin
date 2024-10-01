@@ -13,7 +13,7 @@ export default function Navbar() {
 
   const closeMenu = () => {
     setIsMenuOpen(false);
-  }
+  };
 
   const handleClick = async (event) => {
     event.preventDefault();
@@ -21,10 +21,10 @@ export default function Navbar() {
     try {
       const response = await axios.get("http://localhost:3000/logout");
       const result = response.data;
-      if(!result.success){
+      if (!result.success) {
         throw new Error("로그아웃 실패");
       }
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
       setName("");
     } catch (error) {
       console.error("POST 요청 오류:", error);
@@ -51,7 +51,15 @@ export default function Navbar() {
               <NavLink to="/register">가입</NavLink>
             </>
           ) : (
-            <NavLink to="locations">로그아웃</NavLink>
+            <NavLink
+              onClick={(e) => {
+                handleClick(e);
+                closeMenu();
+              }}
+              to="locations"
+            >
+              로그아웃
+            </NavLink>
           )}
         </div>
       </div>
@@ -62,7 +70,11 @@ export default function Navbar() {
           <NavLink onClick={closeMenu} to="/locations" className="block py-2">
             리스트 보기
           </NavLink>
-          <NavLink onClick={closeMenu} to="/locations/new" className="block py-2">
+          <NavLink
+            onClick={closeMenu}
+            to="/locations/new"
+            className="block py-2"
+          >
             새로운 장소
           </NavLink>
 
@@ -71,15 +83,23 @@ export default function Navbar() {
               <NavLink onClick={closeMenu} to="/login" className="block py-2">
                 로그인
               </NavLink>
-              <NavLink onClick={closeMenu} to="/register" className="block py-2">
+              <NavLink
+                onClick={closeMenu}
+                to="/register"
+                className="block py-2"
+              >
                 가입
               </NavLink>
             </>
           ) : (
-            <NavLink onClick={(e)=>{
-              handleClick(e);
-              closeMenu();
-              }} to="/locations" className="block py-2">
+            <NavLink
+              onClick={(e) => {
+                handleClick(e);
+                closeMenu();
+              }}
+              to="/locations"
+              className="block py-2"
+            >
               로그아웃
             </NavLink>
           )}
