@@ -1,20 +1,20 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LocationsList, {
   loader as locationsListLoader,
 } from "./pages/LocationsList";
 import LocationDetail, {
   loader as locationLoader,
 } from "./pages/LocationDetail/index";
-import NewLocation, { action as locationAction } from "./pages/NewLocation";
+import NewLocation from "./pages/NewLocation";
 import EditLocation, {
   loader as editLocationLoader,
   action as editLocationAction,
 } from "./pages/EditLocation";
 import Register, { action as registerAction } from "./pages/Register";
-import Login, { action as loginAction } from "./pages/Login";
 
+import Login, { action as loginAction } from "./pages/Login";
 import { jwtDecode } from "jwt-decode";
 import { useLayoutEffect } from "react";
 import { authStore } from "./zustand/AuthStore";
@@ -57,7 +57,6 @@ const router = createBrowserRouter([
       {
         path: "/locations/new",
         element: <NewLocation />,
-        action: locationAction,
       },
     ],
   },

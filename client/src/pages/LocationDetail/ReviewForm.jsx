@@ -49,6 +49,7 @@ export default function ReviewForm({ locationId }) {
           <div className="flex">
             {new Array(5).fill(null).map((_, idx) => (
               <img
+                key={idx}
                 onMouseEnter={() => {
                   setStar(idx + 1);
                 }}

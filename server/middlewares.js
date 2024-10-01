@@ -3,6 +3,8 @@ import AppError from "./utils/AppError.js";
 import Location from "./models/location.js";
 import Review from "./models/review.js";
 import jwt from "jsonwebtoken";
+import uploadToCloudinary from "./utils/uploadToCloudinary.js";
+import multerConfig from "./config/multer.js";
 
 const validateLocation = (req, res, next) => {
   const { error } = locationSchema.validate(req.body);
@@ -68,6 +70,25 @@ const isReviewAuthor = async (req, res, next) => {
   next();
 };
 
+const uploadHandler = async (req, res, next) => {
+  if(!req.file) {
+    return res.status(400).json({message: '파일이 존재하지 않습니다'});
+  }
+  
+  const result = await uploadToCloudinary(req.file.buffer);
+  req.file = result;
+  console.log('테스트', req.body);
+  console.log('업로드 핸들러', req.file);
+  // const uploadPromises = req.files.map(file => {
+  //   uploadToCloudinary(file.buffer);
+  // })
+
+  // const results = await Promise.all(uploadPromises);
+  // req.results = results;
+  
+  next()
+}
+
 export {
   validateLocation,
   validateReview,
@@ -75,4 +96,5 @@ export {
   authenticateToken,
   isAuthor,
   isReviewAuthor,
+  uploadHandler,
 };

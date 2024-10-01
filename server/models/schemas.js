@@ -3,7 +3,7 @@ import Joi from "joi";
 const locationSchema = Joi.object({
   author: Joi.string().required(),
   title: Joi.string().required(),
-  image: Joi.string().required(),
+  // image: Joi.string().required(),
   location: Joi.string().required(),
   description: Joi.string().required(),
 });

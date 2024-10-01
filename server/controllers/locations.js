@@ -7,6 +7,7 @@ const getAll = async (req, res) => {
 
 const create = async (req, res) => {
   const location = new Location(req.body);
+  location.image = req.file.secure_url;
   await location.save();
   res.json({ success: true, redirect: location._id });
 };
