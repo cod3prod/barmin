@@ -15,8 +15,9 @@ const register = async (req, res, next) => {
       JWT_SECRET,
       { expiresIn: "2h" }
     );
-
-    res.json({ success: true, message: "회원가입 성공", token });
+    
+    console.log("Register successful : ", user);
+    res.status(200).json({ token });
   });
 };
 
@@ -27,16 +28,19 @@ const login = (req, res) => {
     JWT_SECRET,
     { expiresIn: "2h" }
   );
-  res.json({ success: true, message: "로그인 성공", token });
+  console.log("Login successful : ", user.username);
+  res.json({ message: "Login successful", token });
 };
 
 const logout = (req, res) => {
   req.logout((err) => {
     if (err) {
-      console.log("에러", err);
+      err.message = "Logout error";
+      console.log("Logout error", err);
       return next(err);
     }
-    res.json({ success: true, message: "로그아웃 성공" });
+    console.log("Logout successful");
+    res.json({ message: "Logout successful" });
   });
 };
 

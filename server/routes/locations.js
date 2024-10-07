@@ -2,7 +2,7 @@ import express from "express";
 import wrapAsync from "../utils/wrapAsync.js";
 import { validateLocation, authenticateToken, isAuthor, uploadHandler } from "../middlewares.js";
 import locations from '../controllers/locations.js'
-import multerConfig from "../config/multer.js";
+import upload from "../config/multer.js";
 
 const router = express.Router({ mergeParams: true });
 
@@ -13,7 +13,7 @@ router
   )
   .post(
     authenticateToken,
-    multerConfig("imageFile"),
+    upload.array("images"),
     wrapAsync(uploadHandler),
     validateLocation,
     wrapAsync(locations.create)

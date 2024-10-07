@@ -4,9 +4,23 @@ const Schema = mongoose.Schema;
 
 const LocationSchema = new Schema({
   title: String,
-  image: String,
+  images: [
+    {
+      url: String,
+      public_id: String,
+      _id: false,
+    },
+  ],
   description: String,
-  location: String,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  address: String,
+  coordinate: {
+    lng: Number,
+    lat: Number,
+  },
   author: {
     type: Schema.Types.ObjectId,
     ref: "User",

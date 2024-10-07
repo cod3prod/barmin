@@ -2,15 +2,25 @@ import Location from "../models/location.js";
 
 const getAll = async (req, res) => {
   const locations = await Location.find({});
+  console.log("locations loaded");
   res.json(locations);
 };
 
 const create = async (req, res) => {
+  console.log('테스트', req.body);
   const location = new Location(req.body);
-  location.image = req.file.secure_url;
+  for(let i = 0 ; i < req.files.length ; i++){
+    const image = {
+      url: req.results[i].secure_url,
+      public_id: req.results[i].public_id,
+    }
+    location.images.push(image);
+  }
   await location.save();
-  res.json({ success: true, redirect: location._id });
+  console.log(`${location._id} created successfully`);
+  res.json({ message: "Location created successfully", redirect: location._id });
 };
+
 
 const getWithReviews = async (req, res) => {
   const location = await Location.findById(req.params.id).populate("reviews");
@@ -22,13 +32,15 @@ const update = async (req, res) => {
   await Location.findByIdAndUpdate(id, {
     ...req.body,
   });
-  res.json({ success: true });
+  console.log(`${id} updated successfully`);
+  res.json({ message: "Successfully updated the location" });
 };
 
 const remove = async (req, res) => {
   const { id } = req.params;
   await Location.findByIdAndDelete(id);
-  res.json({ success: true });
+  console.log(`${id} deleted successfully`);
+  res.json({ message: "Location deleted successfully" });
 };
 
 const getDetails = async (req, res) => {

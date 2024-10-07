@@ -1,29 +1,24 @@
 import { createBrowserRouter } from "react-router-dom";
-import Layout from "../components/Layout";
-import Home from "../pages/Home";
-import LocationsList, {
-    loader as locationsListLoader,
-} from "../pages/LocationsList";
-import LocationDetail, {
-  loader as locationLoader,
-} from "../pages/LocationDetail/index";
-import NewLocation from "../pages/NewLocation";
-import EditLocation, {
-  loader as editLocationLoader,
-  action as editLocationAction,
-} from "../pages/EditLocation";
-import Register, { action as registerAction } from "../pages/Register";
-
-import Login, { action as loginAction } from "../pages/Login";
-
+import Layout, {action as layoutAction} from "../layouts";
+import Home from "../views/Home";
+import Register, {action as registerAction} from "../views/Register";
+import Login, { action as loginAction } from "../views/Login";
+import List, { loader as listLoader } from "../views/List";
+import Detail, { loader as detailLoader, action as detailAction } from "../views/Detail";
+import Edit, {
+  loader as editLoader,
+  action as editAction,
+} from "../views/Edit";
+import New, { action as newAction} from "../views/New";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    action: layoutAction,
     children: [
       {
-        path: "/",
+        index: true,
         element: <Home />,
       },
       {
@@ -38,23 +33,25 @@ const router = createBrowserRouter([
       },
       {
         path: "/locations",
-        element: <LocationsList />,
-        loader: locationsListLoader,
+        element: <List />,
+        loader: listLoader,
       },
       {
         path: "/locations/:id",
-        element: <LocationDetail />,
-        loader: locationLoader,
+        element: <Detail />,
+        loader: detailLoader,
+        action: detailAction,
       },
       {
         path: "/locations/:id/edit",
-        element: <EditLocation />,
-        loader: editLocationLoader,
-        action: editLocationAction,
+        element: <Edit />,
+        loader: editLoader,
+        action: editAction,
       },
       {
         path: "/locations/new",
-        element: <NewLocation />,
+        element: <New />,
+        action: newAction,
       },
     ],
   },

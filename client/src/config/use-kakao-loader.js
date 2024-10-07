@@ -4,6 +4,7 @@ import { KAKAOJSKEY } from "./config.js";
 export default function useKakaoLoader() {
   useKakaoLoaderOrigin({
     appkey: KAKAOJSKEY,
-    libraries: ["clusterer", "drawing", "services"],
+    libraries: ["services", "clusterer", "drawing"],
   });
+
 }
