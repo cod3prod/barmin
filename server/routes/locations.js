@@ -1,6 +1,6 @@
 import express from "express";
 import wrapAsync from "../utils/wrapAsync.js";
-import { validateLocation, authenticateToken, isAuthor, uploadHandler } from "../middlewares.js";
+import { validateLocation, authenticateToken, isAuthor, uploadHandler, deleteHandler } from "../middlewares.js";
 import locations from '../controllers/locations.js'
 import upload from "../config/multer.js";
 
@@ -33,6 +33,7 @@ router
   .delete(
     authenticateToken,
     isAuthor,
+    deleteHandler,
     wrapAsync(locations.remove)
   );
 

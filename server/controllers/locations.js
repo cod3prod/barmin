@@ -7,7 +7,6 @@ const getAll = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  console.log('테스트', req.body);
   const location = new Location(req.body);
   for(let i = 0 ; i < req.files.length ; i++){
     const image = {

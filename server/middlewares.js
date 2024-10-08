@@ -106,6 +106,23 @@ const uploadHandler = async (req, res, next) => {
   }
 };
 
+const deleteHandler = async (req, res, next) => {
+  const { id } = req.params;
+  const location = await Location.findById(id);
+  const images = location.images;
+  images.map(async (image) => {
+    try {
+      const { public_id } = image;
+      await cloudinary.uploader.destroy(public_id);
+      console.log('images deleted in cloudinary', public_id);
+    } catch (error) {
+      return res.status(500).json({ message: "Cloudinary 업로드 실패", error });
+    }
+  })
+
+  next();
+};
+
 export {
   validateLocation,
   validateReview,
@@ -114,4 +131,5 @@ export {
   isAuthor,
   isReviewAuthor,
   uploadHandler,
+  deleteHandler,
 };
