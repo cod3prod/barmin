@@ -14,7 +14,7 @@ router
   .post(
     authenticateToken,
     upload.array("images"),
-    wrapAsync(uploadHandler),
+    uploadHandler,
     validateLocation,
     wrapAsync(locations.create)
   );
@@ -24,9 +24,12 @@ router
   .get(
     wrapAsync(locations.getWithReviews)
   )
-  .put(
+  .patch(
     authenticateToken,
     isAuthor,
+    upload.array("images"),
+    deleteHandler,
+    uploadHandler,
     validateLocation,
     wrapAsync(locations.update)
   )

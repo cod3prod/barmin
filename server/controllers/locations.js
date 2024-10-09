@@ -28,8 +28,17 @@ const getWithReviews = async (req, res) => {
 
 const update = async (req, res) => {
   const { id } = req.params;
+  const images = [];
+  for(let i = 0 ; i < req.files.length ; i++){
+    const image = {
+      url: req.results[i].secure_url,
+      public_id: req.results[i].public_id,
+    }
+    images.push(image);
+  }
   await Location.findByIdAndUpdate(id, {
     ...req.body,
+    images: images,
   });
   console.log(`${id} updated successfully`);
   res.json({ message: "Successfully updated the location" });
