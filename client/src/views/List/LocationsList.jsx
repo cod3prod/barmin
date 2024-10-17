@@ -1,27 +1,25 @@
-import NavButton from "../../components/NavButton";
+import LocationItem from "./LocationItem";
 
-export default function LocationsList({ data }) {
+export default function LocationsList(props) {
+  const { data, state } = props;
+
+  const filteredData = data.filter((location) => {
+    const { lat, lng } = location.coordinate;
+    const { lat: swLat, lng: swLng } = state.swLatLng;
+    const { lat: neLat, lng: neLng } = state.neLatLng;
+
+    return lat > swLat && lat < neLat && lng > swLng && lng < neLng;
+  });
 
   return (
-    <>
-      {data.map((el) => (
-        <div
-          key={el._id}
-          className="card mb-4 border border-gray-300 rounded-lg"
-        >
-          <div className="flex">
-            <div className="w-1/3">
-              <img className="w-full h-auto" alt="" src={el.images[0].url} />
-            </div>
-            <div className="w-2/3 p-4">
-              <h5 className="text-lg font-bold">{el.title}</h5>
-              <p>{el.description}</p>
-              <p className="text-gray-500 mb-3">{el.address}</p>
-              <NavButton to={`/locations/${el._id}`}>상세 정보</NavButton>
-            </div>
-          </div>
-        </div>
-      ))}
-    </>
+    <div className="custom-scroll h-[35rem] flex flex-col overflow-y-auto lg:w-2/5">
+      {filteredData.length === 0 ? (
+        <p className='h-full flex justify-center items-center'>아무것도 없나요? 새로 등록해주세요!</p>
+      ) : (
+        filteredData.map((location) => (
+          <LocationItem key={location._id} location={location} />
+        ))
+      )}
+    </div>
   );
 }

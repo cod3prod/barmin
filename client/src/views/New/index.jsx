@@ -1,13 +1,16 @@
-import { Form, redirect, useNavigation } from "react-router-dom";
+import { redirect, useNavigate, useNavigation } from "react-router-dom";
 import KakaoMap from "../../components/KakaoMap";
-import Input from "../../components/Input";
-import Textarea from "../../components/Textarea";
 import Button from "../../components/Button";
 import NavButton from "../../components/NavButton";
-import { useState } from "react";
+import { useEffect, useReducer } from "react";
 import api from "../../config/api";
 import { imagesStore } from "../../zustand/ImagesStore";
+import { authStore } from "../../zustand/AuthStore";
 import { jwtDecode } from "jwt-decode";
+import Submitting from "../../components/Submitting";
+import { formReducer, initialState } from "../../reducer/formReducer";
+import LocationForm from "../../components/LocationForm";
+import ImagesPreview from "../../components/ImagesPreview";
 
 export async function action({ request }) {
   const token = localStorage.getItem("token");
@@ -42,26 +45,19 @@ export async function action({ request }) {
 }
 
 export default function New() {
-  const [title, setTitle] = useState("");
-  const [address, setAddress] = useState("");
-  const [coordinate, setCoordinate] = useState({});
-  const [description, setDescription] = useState("");
   const { images, setImages } = imagesStore();
+  const { username } = authStore();
+  const [state, dispatch] = useReducer(formReducer, initialState);
   const navigation = useNavigation();
+  const navigate = useNavigate();
   const isSubmitting = navigation.state === "submitting";
 
-  if (isSubmitting) {
-    return (
-      <>
-        <p>Wait</p>
-        <p>Wait</p>
-        <p>Wait</p>
-        <p>Wait</p>
-        <p>Wait</p>
-        <p>Wait</p>
-      </>
-    );
-  }
+  useEffect(() => {
+    setImages([]);
+    if (!username) {
+      navigate("/login");
+    }
+  }, [username]); // username과 navigate를 넣어야할까?
 
   const handleImages = (e) => {
     const files = e.target.files;
@@ -75,74 +71,49 @@ export default function New() {
 
   return (
     <>
-      <div className="flex justify-center">
-        <h1 className="text-3xl text-center">New Location</h1>
-      </div>
-      <div className="max-w-md mx-auto">
-        <KakaoMap
-          title={title}
-          coordinate={coordinate}
-          setCoordinate={setCoordinate}
-          setAddress={setAddress}
-        />
-        <Form
-          method="POST"
-          action="/locations/new"
-          encType="multipart/form-data"
-        >
-          <div className="flex flex-col gap-3">
-            <Input id="title" onChange={(e) => setTitle(e.target.value)}>
-              제목
-            </Input>
-            <Input id="address" value={address} readOnly>
-              주소
-            </Input>
-            <Textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows="5"
-            >
-              설명
-            </Textarea>
-            <input
-              type="text"
-              name="coordinate"
-              value={JSON.stringify(coordinate)}
-              readOnly
-              hidden
+      {isSubmitting && <Submitting />}
+      <section className="mt-4 flex flex-col container lg:max-w-7xl mx-auto ">
+        <div className="px-4 pt-4 flex justify-center">
+          <h1 className="text-2xl font-bold">새로운 장소 등록</h1>
+        </div>
+
+        <div className="flex flex-col gap-4 p-4 lg:flex-row">
+          <div className="w-full h-[20rem] lg:h-[35rem] lg:w-3/5">
+            <KakaoMap
+              state={state}
+              dispatch={dispatch}
+              centerChangeLimit={1}
+              style={{
+                // 지도의 크기
+                width: "100%",
+                height: "100%",
+              }}
             />
-            <input
-              id="images"
-              name="images"
-              type="file"
-              accept="image/*"
-              onChange={handleImages}
-              multiple
-            />
-            <div className="grid grid-cols-2 gap-2">
-              {images.map((image, index) => (
-                <div key={index} className="flex flex-col">
-                  <img
-                    src={URL.createObjectURL(image)}
-                    alt={`Preview ${index}`}
-                    className="w-full h-32 object-cover rounded"
-                  />
-                  <button type="button" onClick={() => deleteImage(index)}>
-                    삭제
-                  </button>
-                </div>
-              ))}
+          </div>
+
+          <LocationForm
+            className="w-full lg:w-2/5"
+            state={state}
+            dispatch={dispatch}
+            handleImages={handleImages}
+          >
+            <div className="flex justify-between my-4">
+              <Button className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300">
+                생성
+              </Button>
+              <NavButton to="/locations" className="w-26">
+                돌아가기
+              </NavButton>
             </div>
-          </div>
-          <div className="flex justify-between my-4">
-            <Button className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300">
-              생성
-            </Button>
-            <NavButton to="/locations">돌아가기</NavButton>
-          </div>
-        </Form>
-      </div>
+          </LocationForm>
+        </div>
+
+        <ImagesPreview
+          className="p-4 flex flex-wrap gap-4"
+          images={images}
+          deleteImage={deleteImage}
+        />
+      </section>
     </>
   );
 }

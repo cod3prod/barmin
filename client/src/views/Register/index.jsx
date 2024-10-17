@@ -10,7 +10,7 @@ export async function action({ request }) {
 
   try {
     const response = await api.post(
-      "/register",
+      "users/register",
       formValues,
       {
         headers: {
@@ -33,7 +33,7 @@ export async function action({ request }) {
 
 export default function Register() {
   return (
-    <div className="max-w-md mx-auto p-4">
+    <div className="mt-4 max-w-md mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">Register</h1>
       <Form method="POST" className="space-y-4" noValidate>
         <Input type="text" id="username" required>

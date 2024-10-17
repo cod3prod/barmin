@@ -1,14 +1,15 @@
+import { useReducer } from "react";
 import { useLoaderData } from "react-router-dom";
-import KakaoMap from "../../components/KakaoMap";
-import NavButton from "../../components/NavButton";
+import { geoReducer, initialState } from "../../reducer/geoReducer";
 import LocationsList from "./LocationsList";
 import api from "../../config/api";
+import KakaoCluster from "./KakaoCluster";
+import GeoTools from "./GeoTools";
 
 export async function loader() {
   try {
     const response = await api.get("/locations");
     const result = response.data;
-    console.log(result);
     return result;
   } catch (error) {
     console.error("Fail to load locations", error);
@@ -17,17 +18,15 @@ export async function loader() {
 
 export default function List() {
   const data = useLoaderData();
+  const [ state, dispatch ] = useReducer(geoReducer, initialState);
 
   return (
-    <div className="container mx-auto">
-      {/* <KakaoMap className="my-4 rounded-lg"/> */}
-      <NavButton
-        className="mb-4 text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300"
-        to="/locations/new"
-      >
-        새로운 장소 추가
-      </NavButton>
-      <LocationsList data={data}/>
-    </div>
+    <section className="mt-4 flex flex-col container mx-auto lg:max-w-7xl">
+      <GeoTools state={state} dispatch={dispatch} />
+      <div className="flex flex-col gap-4 p-4 lg:flex-row">
+        <KakaoCluster data={data} state={state} dispatch={dispatch} />
+        <LocationsList data={data} state={state} />
+      </div>
+    </section>
   );
 }

@@ -8,7 +8,7 @@ export async function action({ request }) {
   const formData = await request.formData();
   const formValues = Object.fromEntries(formData);
   try {
-    const response = await api.post("/login", formValues, {
+    const response = await api.post("users/login", formValues, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -30,7 +30,7 @@ export async function action({ request }) {
 
 export default function Login() {
   return (
-    <div className="max-w-md mx-auto p-4">
+    <div className="mt-4 max-w-md mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">Login</h1>
       <Form method="POST" action="/login" className="space-y-4" noValidate>
         <Input type="text" id="username" required>

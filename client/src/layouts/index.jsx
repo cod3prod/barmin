@@ -8,7 +8,7 @@ export async function action() {
   const { setName } = authStore.getState();
 
   await api
-    .post("/logout")
+    .post("users/logout")
     .then((res) => {
       // 로그아웃 성공 플래시 메시지 만들기
       localStorage.removeItem("token");
@@ -26,12 +26,12 @@ export async function action() {
 
 export default function Layout() {
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Header />
       <main>
         <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

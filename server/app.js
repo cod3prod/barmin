@@ -44,7 +44,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use("/", userRoutes)
+app.use("/users", userRoutes)
 app.use("/locations", locationRoutes);
 app.use("/locations/:id/reviews", reviewRoutes);
 

@@ -44,4 +44,26 @@ const logout = (req, res) => {
   });
 };
 
-export default { register, login, logout };
+
+const validateToken = (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+  console.log("token in controller", token);
+  
+  if (!token) return null;
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403); 
+    
+    req.user = user;
+    console.log(user, "user verified");
+    
+    const newToken = jwt.sign(
+      { _id: user._id, username: user.username, role: user.role },
+      JWT_SECRET,
+      { expiresIn: "2h" } 
+    );
+
+    res.json({ token: newToken });
+  });
+};
+export default { register, login, logout, validateToken };
