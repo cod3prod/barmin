@@ -2,7 +2,7 @@ import { redirect, useNavigate, useNavigation } from "react-router-dom";
 import KakaoMap from "../../components/KakaoMap";
 import Button from "../../components/Button";
 import NavButton from "../../components/NavButton";
-import { useEffect, useReducer } from "react";
+import { useLayoutEffect, useReducer } from "react";
 import api from "../../config/api";
 import { imagesStore } from "../../zustand/ImagesStore";
 import { authStore } from "../../zustand/AuthStore";
@@ -52,12 +52,12 @@ export default function New() {
   const navigate = useNavigate();
   const isSubmitting = navigation.state === "submitting";
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setImages([]);
     if (!username) {
       navigate("/login");
     }
-  }, [username]); // username과 navigate를 넣어야할까?
+  }, [username]);
 
   const handleImages = (e) => {
     const files = e.target.files;
