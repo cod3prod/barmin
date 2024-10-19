@@ -23,7 +23,7 @@ export default function Features() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {Array.from({ length: 4 }).map((_, index) => (
-          <FeatureItem index={index} />
+          <FeatureItem key={index} index={index} />
         ))}
       </div>
     </section>

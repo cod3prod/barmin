@@ -1,8 +1,12 @@
-import { Form, redirect } from "react-router-dom";
+import { useState } from "react";
+import { redirect } from "react-router-dom";
+import { twMerge } from "tailwind-merge";
 import { authStore } from "../../zustand/AuthStore";
-import Input from "../../components/Input";
-import Button from "../../components/Button";
+import { flashStore } from "../../zustand/FlashStore";
 import api from "../../config/api";
+import LoginForm from "./LoginForm";
+import LoginBackground from "./LoginBackground";
+import LoginTypo from "./LoginTypo";
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -17,32 +21,41 @@ export async function action({ request }) {
 
     localStorage.setItem("token", result.token);
     authStore.setState({ username: formValues.username });
-    // 로그인 성공 플래시 메시지 만들기
+    flashStore.setState({
+      type: "success",
+      message: "로그인을 성공하셨습니다!",
+      isOpen: true,
+    });
     console.log("Login successful", result);
     return redirect("/locations");
-
   } catch (error) {
-    // 로그인 실패 플래시 메시지 만들기
+    flashStore.setState({
+      type: "error",
+      message: "로그인을 실패하셨습니다.",
+      isOpen: true,
+    });
     console.error("Fail to login", error);
     return redirect("/login");
   }
 }
 
 export default function Login() {
+  const [onFocus, setOnFocus] = useState(false);
+
   return (
-    <div className="mt-4 max-w-md mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Login</h1>
-      <Form method="POST" action="/login" className="space-y-4" noValidate>
-        <Input type="text" id="username" required>
-          Username
-        </Input>
-        <Input type="password" id="password" required>
-          Password
-        </Input>
-        <Button className="text-lg w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600">
-          Login
-        </Button>
-      </Form>
-    </div>
+    <section>
+      <div className="flex p-4 absolute w-full max-w-7xl h-2/3 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-auto">
+        <LoginBackground />
+        <LoginTypo />
+        <div
+          className={twMerge(
+            "relative z-10 w-full max-w-md mx-auto h-full md:w-1/2 p-4 shadow-md rounded-lg transition-colors duration-300",
+            onFocus ? "bg-white" : "bg-[rgba(255,255,255,0.8)]"
+          )}
+        >
+          <LoginForm setOnFocus={setOnFocus} />
+        </div>
+      </div>
+    </section>
   );
 }

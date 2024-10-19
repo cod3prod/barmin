@@ -3,6 +3,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 import { authStore } from "../zustand/AuthStore";
 import api from "../config/api";
+import Flash from "../components/Flash";
 
 export async function action() {
   const { setName } = authStore.getState();
@@ -28,10 +29,11 @@ export default function Layout() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main>
+      <main className="grow">
         <Outlet />
       </main>
       <Footer />
+      <Flash />
     </div>
   );
 }

@@ -75,7 +75,7 @@ export default function Detail() {
   const data = useLoaderData();
 
   if (!data) {
-    return <p>Location not found or has been deleted.</p>;
+    return <p>위치 정보를 찾을 수 없습니다.</p>;
   }
 
   return (
