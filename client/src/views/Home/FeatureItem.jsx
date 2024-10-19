@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { twMerge } from "tailwind-merge";
 import ImageSkeleton from "../../components/ImageSkeleton";
 
 export default function FeatureItem(props) {
@@ -28,12 +29,12 @@ export default function FeatureItem(props) {
 
       {isLoading && <ImageSkeleton />}
       <img
-        className={isLoading ? "hidden" : ""}
+        className={twMerge("w-full",isLoading ? "hidden" : "")}
         src={`/feat${index + 1}-${order}.png`}
         alt={`feat${index + 1}-${order}`}
         onLoad={() => setIsLoading(false)}
       />
-      <p className="text-gray-600">
+      <p className="mt-4 text-gray-600">
         {descriptions[index]}
       </p>
     </div>
