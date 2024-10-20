@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { redirect } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
+import { jwtDecode } from "jwt-decode";
 import { authStore } from "../../zustand/AuthStore";
 import { flashStore } from "../../zustand/FlashStore";
 import api from "../../config/api";
@@ -19,10 +20,9 @@ export async function action({ request }) {
       },
     });
     const result = response.data;
-    // result = { token: "xxxxxx" }
-    console.log(result);
     localStorage.setItem("token", result.token);
-    authStore.setState({ username: formValues.username });
+    const decoded = jwtDecode(result.token);
+    authStore.setState({ _id: decoded._id, username: decoded.username, role: decoded.role });
     flashStore.setState({
       type: "success",
       message: "성공적으로 가입하셨습니다!",
