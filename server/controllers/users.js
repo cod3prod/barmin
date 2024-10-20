@@ -45,7 +45,7 @@ const logout = (req, res) => {
 };
 
 
-const validateToken = (req, res) => {
+const refreshToken = (req, res) => {
   const token = req.headers["authorization"]?.split(" ")[1];
   console.log("token in controller", token);
   
@@ -66,4 +66,4 @@ const validateToken = (req, res) => {
     res.json({ token: newToken });
   });
 };
-export default { register, login, logout, validateToken };
+export default { register, login, logout, refreshToken };

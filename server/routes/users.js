@@ -12,6 +12,6 @@ router.post("/login", passport.authenticate("local"), users.login);
 
 router.post("/logout", users.logout);
 
-router.get("/validate", users.validateToken);
+router.get("/validate", users.refreshToken);
 
 export default router;
