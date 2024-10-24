@@ -7,7 +7,7 @@ import cloudinary from "./config/cloudinary.js";
 import { JWT_SECRET } from "./config/config.js";
 
 const validateLocation = (req, res, next) => {
-  if(req.body.coordinate){
+  if (req.body.coordinate) {
     req.body.coordinate = JSON.parse(req.body.coordinate);
   }
   const { error } = locationSchema.validate(req.body);
@@ -58,8 +58,9 @@ const isAuthor = async (req, res, next) => {
   const { id } = req.params;
   const location = await Location.findById(id);
   if (!location.author.equals(req.user._id)) {
-    return res.status(403).json({ message: "You do not have permission to access this resource." });
-
+    return res
+      .status(403)
+      .json({ message: "You do not have permission to access this resource." });
   }
   next();
 };
@@ -68,16 +69,18 @@ const isReviewAuthor = async (req, res, next) => {
   const { reviewId } = req.params;
   const review = await Review.findById(reviewId);
   if (!review.author.equals(req.user._id)) {
-    return res.status(403).json({ message: "You do not have permission to access this resource." });
-
+    return res
+      .status(403)
+      .json({ message: "You do not have permission to access this resource." });
   }
   next();
 };
 
 const uploadHandler = async (req, res, next) => {
   if (!req.files || req.files.length === 0) {
-    return res.status(403).json({ message: "You do not have permission to access this resource." });
-
+    return res
+      .status(403)
+      .json({ message: "You do not have permission to access this resource." });
   }
 
   try {
@@ -85,7 +88,7 @@ const uploadHandler = async (req, res, next) => {
       req.files.map((file) => {
         return new Promise((resolve, reject) => {
           cloudinary.uploader
-            .upload_stream({ folder: "BARMIN" }, (error, result) => {
+            .upload_stream({ folder: "barmin" }, (error, result) => {
               if (error) {
                 console.error("Error uploading to Cloudinary", error);
                 reject(error);
@@ -99,7 +102,7 @@ const uploadHandler = async (req, res, next) => {
     );
 
     req.results = results;
-    console.log(req.results);
+    console.log("images uploaded to cloudinary", req.results);
     next();
   } catch (error) {
     return res.status(500).json({ message: "Cloudinary 업로드 실패", error });
@@ -107,6 +110,21 @@ const uploadHandler = async (req, res, next) => {
 };
 
 const deleteHandler = async (req, res, next) => {
+  const { imagesToDelete } = req.body;
+  imagesToDelete.map(async (image) => {
+    try {
+      const { public_id } = image;
+      await cloudinary.uploader.destroy(public_id);
+      console.log("images deleted in cloudinary", public_id);
+    } catch (error) {
+      return res.status(500).json({ message: "Cloudinary 삭제 실패", error });
+    }
+  });
+
+  next();
+};
+
+const deleteImagesByLocation = async (req, res, next) => {
   const { id } = req.params;
   const location = await Location.findById(id);
   const images = location.images;
@@ -114,11 +132,11 @@ const deleteHandler = async (req, res, next) => {
     try {
       const { public_id } = image;
       await cloudinary.uploader.destroy(public_id);
-      console.log('images deleted in cloudinary', public_id);
+      console.log("images deleted in cloudinary", public_id);
     } catch (error) {
-      return res.status(500).json({ message: "Cloudinary 업로드 실패", error });
+      return res.status(500).json({ message: "Cloudinary 삭제 실패", error });
     }
-  })
+  });
 
   next();
 };
@@ -132,4 +150,5 @@ export {
   isReviewAuthor,
   uploadHandler,
   deleteHandler,
+  deleteImagesByLocation
 };

@@ -77,6 +77,15 @@ export default function SmallMenu({ isMenuOpen, toggleMenu, username }) {
                 NEW
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                to="/profile"
+                className="text-white hover:text-gray-300"
+                onClick={toggleMenu}
+              >
+                PROFILE
+              </NavLink>
+            </li>
           </ul>
         </div>
       </div>

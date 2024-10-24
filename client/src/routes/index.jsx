@@ -10,6 +10,7 @@ import Edit, {
   action as editAction,
 } from "../views/Edit";
 import New, { action as newAction} from "../views/New";
+import Profile, {loader as profileLoader, action as profileAction} from "../views/Profile";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,12 @@ const router = createBrowserRouter([
         element: <New />,
         action: newAction,
       },
+      {
+        path: "/profile",
+        element: <Profile />,
+        loader: profileLoader,
+        action: profileAction,
+      }
     ],
   },
 ]);

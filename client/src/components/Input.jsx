@@ -5,9 +5,7 @@ export default function Input(props) {
   return (
     <div>
       <label
-        className={twMerge(
-          "mb-2 text-sm font-medium text-gray-900 dark:text-white"
-        )}
+        className="mb-2 text-sm font-medium text-gray-900 dark:text-white"
         htmlFor={id}
       >
         {children}

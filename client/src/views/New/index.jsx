@@ -4,39 +4,37 @@ import Button from "../../components/Button";
 import NavButton from "../../components/NavButton";
 import { useLayoutEffect, useReducer } from "react";
 import api from "../../config/api";
-import { imagesStore } from "../../zustand/ImagesStore";
-import { authStore } from "../../zustand/AuthStore";
 import { jwtDecode } from "jwt-decode";
 import Submitting from "../../components/Submitting";
 import { formReducer, initialState } from "../../reducer/formReducer";
 import LocationForm from "../../components/LocationForm";
 import ImagesPreview from "../../components/ImagesPreview";
+import { imagesStore } from "../../zustand/ImagesStore";
 
 export async function action({ request }) {
   const token = localStorage.getItem("token");
   const decoded = jwtDecode(token);
+
+  const receivedFormData = await request.formData();
+
   const { images } = imagesStore.getState();
-
-  const receivedformData = await request.formData();
-  const sendFormData = new FormData();
-
-  sendFormData.append("title", receivedformData.get("title"));
-  sendFormData.append("address", receivedformData.get("address"));
-  sendFormData.append("coordinate", receivedformData.get("coordinate"));
-  sendFormData.append("description", receivedformData.get("description"));
-  sendFormData.append("author", decoded._id);
-  images.map((image) => sendFormData.append("images", image));
+  const sendFormData = {
+    title: receivedFormData.get("title"),
+    address: receivedFormData.get("address"),
+    coordinate: receivedFormData.get("coordinate"),
+    description: receivedFormData.get("description"),
+    author: decoded._id,
+    images: images,
+  };
 
   try {
     const response = await api.post("/locations", sendFormData, {
       headers: {
-        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       },
     });
     const result = response.data;
     imagesStore.setState({ images: [] });
-    console.log(result);
     return redirect(`/locations/${result.redirect}`);
   } catch (error) {
     console.error(error);
@@ -45,34 +43,62 @@ export async function action({ request }) {
 }
 
 export default function New() {
-  const { images, setImages } = imagesStore();
-  const { username } = authStore();
   const [state, dispatch] = useReducer(formReducer, initialState);
+  const { images, setImages } = imagesStore();
   const navigation = useNavigation();
   const navigate = useNavigate();
   const isSubmitting = navigation.state === "submitting";
 
   useLayoutEffect(() => {
     setImages([]);
-    if (!username) {
+    const token = localStorage.getItem("token");
+    const decoded = jwtDecode(token);
+    if (!decoded.username) {
       navigate("/login");
     }
-  }, [username]);
+  }, [navigate]);
 
-  const handleImages = (e) => {
+  const handleImages = async (e) => {
     const files = e.target.files;
     const filesArray = Array.from(files);
-    setImages([...images, ...filesArray]);
+
+    const formData = new FormData();
+    filesArray.forEach((file) => formData.append("images", file));
+
+    try {
+      const response = await api.post("/locations/images", formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      const result = response.data;
+      setImages([...images, ...result]);
+    } catch (error) {
+      console.error("Image upload failed", error);
+    }
   };
 
-  const deleteImage = (index) => {
-    setImages(images.filter((_, i) => i !== index));
+  const handleDeleteImage = async (index) => {
+    try {
+      const imageToDelete = images[index];
+      await api.delete("/locations/images", {
+        data: { imagesToDelete: [imageToDelete] },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      setImages(images.filter((_, i) => i !== index));
+    } catch (error) {
+      console.error("Error deleting image:", error);
+    }
   };
 
   return (
     <>
       {isSubmitting && <Submitting />}
-      <section className="mt-4 flex flex-col container lg:max-w-7xl mx-auto ">
+      <section className="mt-4 flex flex-col container lg:max-w-7xl mx-auto">
         <div className="px-4 pt-4 flex justify-center">
           <h1 className="text-2xl font-bold">새로운 장소 등록</h1>
         </div>
@@ -84,7 +110,6 @@ export default function New() {
               dispatch={dispatch}
               centerChangeLimit={1}
               style={{
-                // 지도의 크기
                 width: "100%",
                 height: "100%",
               }}
@@ -111,7 +136,7 @@ export default function New() {
         <ImagesPreview
           className="p-4 flex flex-wrap gap-4"
           images={images}
-          deleteImage={deleteImage}
+          handleDeleteImage={handleDeleteImage}
         />
       </section>
     </>

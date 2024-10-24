@@ -6,20 +6,29 @@ const getAll = async (req, res) => {
   res.json(locations);
 };
 
-const create = async (req, res) => {
-  const location = new Location(req.body);
-  for(let i = 0 ; i < req.files.length ; i++){
-    const image = {
-      url: req.results[i].secure_url,
-      public_id: req.results[i].public_id,
-    }
-    location.images.push(image);
-  }
-  await location.save();
-  console.log(`${location._id} created successfully`);
-  res.json({ message: "Location created successfully", redirect: location._id });
+const convertImages = (req, res) => {
+  const images = req.results.map((result) => ({
+    url: result.secure_url,
+    public_id: result.public_id,
+  }));
+  console.log("images converted");
+  res.status(200).json(images);
 };
 
+const deleteImages = (req, res) => {
+  console.log("images deleted");
+  res.status(200).json({ message: "Images deleted successfully" });
+}
+
+const create = async (req, res) => {
+  const location = new Location(req.body);
+  await location.save();
+  console.log(`${location._id} created successfully`);
+  res.json({
+    message: "Location created successfully",
+    redirect: location._id,
+  });
+};
 
 const getWithReviews = async (req, res) => {
   const location = await Location.findById(req.params.id).populate("reviews");
@@ -29,11 +38,11 @@ const getWithReviews = async (req, res) => {
 const update = async (req, res) => {
   const { id } = req.params;
   const images = [];
-  for(let i = 0 ; i < req.files.length ; i++){
+  for (let i = 0; i < req.files.length; i++) {
     const image = {
       url: req.results[i].secure_url,
       public_id: req.results[i].public_id,
-    }
+    };
     images.push(image);
   }
   await Location.findByIdAndUpdate(id, {
@@ -56,4 +65,4 @@ const getDetails = async (req, res) => {
   res.json(location);
 };
 
-export default { getAll, create, getWithReviews, update, remove, getDetails };
+export default { getAll, create, getWithReviews, update, remove, getDetails, convertImages, deleteImages };

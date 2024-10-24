@@ -46,12 +46,13 @@ export async function action({ request }) {
 
 export default function Login() {
   const [onFocus, setOnFocus] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
     <section>
       <div className="flex p-4 absolute w-full max-w-7xl h-2/3 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-auto">
-        <LoginBackground />
-        <LoginTypo />
+        <LoginBackground isLoading={isLoading} setIsLoading={setIsLoading} />
+        <LoginTypo isLoading={isLoading} />
         <div
           className={twMerge(
             "relative z-10 w-full max-w-md mx-auto h-full md:w-1/2 p-4 shadow-md rounded-lg transition-colors duration-300",

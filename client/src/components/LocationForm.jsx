@@ -48,7 +48,7 @@ export default function LocationForm(props) {
           accept="image/*"
           onChange={handleImages}
           multiple
-        />
+        >이미지 업로드</InputFile>
       </div>
       {children}
     </Form>

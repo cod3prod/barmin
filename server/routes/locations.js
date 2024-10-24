@@ -1,29 +1,36 @@
 import express from "express";
 import wrapAsync from "../utils/wrapAsync.js";
-import { validateLocation, authenticateToken, isAuthor, uploadHandler, deleteHandler } from "../middlewares.js";
-import locations from '../controllers/locations.js'
+import {
+  validateLocation,
+  authenticateToken,
+  isAuthor,
+  uploadHandler,
+  deleteHandler,
+  deleteImagesByLocation,
+} from "../middlewares.js";
+import locations from "../controllers/locations.js";
 import upload from "../config/multer.js";
 
 const router = express.Router({ mergeParams: true });
 
 router
   .route("/")
-  .get(
-    wrapAsync(locations.getAll)
-  )
+  .get(wrapAsync(locations.getAll))
+  .post(authenticateToken, validateLocation, wrapAsync(locations.create));
+
+router
+  .route("/images")
   .post(
     authenticateToken,
     upload.array("images"),
     uploadHandler,
-    validateLocation,
-    wrapAsync(locations.create)
-  );
+    locations.convertImages
+  )
+  .delete(authenticateToken, deleteHandler, locations.deleteImages);
 
 router
   .route("/:id")
-  .get(
-    wrapAsync(locations.getWithReviews)
-  )
+  .get(wrapAsync(locations.getWithReviews))
   .patch(
     authenticateToken,
     isAuthor,
@@ -36,12 +43,9 @@ router
   .delete(
     authenticateToken,
     isAuthor,
-    deleteHandler,
+    deleteImagesByLocation,
     wrapAsync(locations.remove)
   );
 
-router.get(
-  "/:id/edit",
-  wrapAsync(locations.getDetails)
-);
+router.get("/:id/edit", wrapAsync(locations.getDetails));
 export default router;

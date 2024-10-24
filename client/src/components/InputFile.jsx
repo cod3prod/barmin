@@ -1,13 +1,16 @@
 import { twMerge } from "tailwind-merge";
 
 export default function InputFile(props) {
-  const { id, className, ...rest } = props;
+  const { id, className, children, ...rest } = props;
   return (
     <div className="flex flex-col items-center justify-center w-full">
+      <p className="flex self-start mb-2 text-sm font-medium text-gray-900 dark:text-white">
+        {children}
+      </p>
       <label
         htmlFor={id}
         className={twMerge(
-          "flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100",
+          "flex flex-col items-center justify-center w-full h-40 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100",
           className
         )}
       >
@@ -28,11 +31,9 @@ export default function InputFile(props) {
             />
           </svg>
           <p className="mb-2 text-sm text-gray-500">
-            <span className="font-semibold">Click to upload</span> or drag and drop
+            간단하게 <span className="font-semibold">클릭</span>으로 업로드
           </p>
-          <p className="text-xs text-gray-500">
-            JPEG, JPG, PNG or WEBP (MAX. 800x400px)
-          </p>
+          <p className="text-xs text-gray-500">JPEG, JPG, PNG or WEBP</p>
         </div>
         <input
           id={id}

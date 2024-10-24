@@ -4,7 +4,7 @@ import Input from "../../components/Input";
 import NavButton from "../../components/NavButton";
 import Button from "../../components/Button";
 
-export default function LoginForm({setOnFocus}) {
+export default function LoginForm({ setOnFocus }) {
   const [buttonContent, setButtonContent] = useState(false);
   return (
     <Form
@@ -15,10 +15,22 @@ export default function LoginForm({setOnFocus}) {
     >
       <p className="text-2xl font-bold mt-6 mb-6">Login</p>
       <div className="flex flex-col gap-4">
-        <Input type="text" id="username" required onFocus={() => setOnFocus(true)} onBlur={() => setOnFocus(false)}>
+        <Input
+          type="text"
+          id="username"
+          required
+          onFocus={() => setOnFocus(true)}
+          onBlur={() => setOnFocus(false)}
+        >
           Username
         </Input>
-        <Input type="password" id="password" required onFocus={() => setOnFocus(true)} onBlur={() => setOnFocus(false)}>
+        <Input
+          type="password"
+          id="password"
+          required
+          onFocus={() => setOnFocus(true)}
+          onBlur={() => setOnFocus(false)}
+        >
           Password
         </Input>
       </div>

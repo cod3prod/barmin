@@ -9,7 +9,14 @@ const locationSchema = Joi.object({
     lng: Joi.number().required(),
   }).required(),
   description: Joi.string().required(),
+  images: Joi.array().items(
+    Joi.object({
+      url: Joi.string().uri().required(),
+      public_id: Joi.string().required(),
+    })
+  ).required()
 });
+
 
 const reviewSchema = Joi.object({
   author: Joi.string().required(),

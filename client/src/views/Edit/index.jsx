@@ -1,5 +1,10 @@
 import React, { useEffect, useReducer, useLayoutEffect } from "react";
-import { redirect, useLoaderData, useNavigation, useNavigate } from "react-router-dom";
+import {
+  redirect,
+  useLoaderData,
+  useNavigation,
+  useNavigate,
+} from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import api from "../../config/api";
 import { imagesStore } from "../../zustand/ImagesStore";
@@ -32,19 +37,18 @@ export async function action({ request, params }) {
   const { images } = imagesStore.getState();
 
   const receivedFormData = await request.formData();
-  const sendFormData = new FormData();
-
-  sendFormData.append("title", receivedFormData.get("title"));
-  sendFormData.append("address", receivedFormData.get("address"));
-  sendFormData.append("coordinate", receivedFormData.get("coordinate"));
-  sendFormData.append("description", receivedFormData.get("description"));
-  sendFormData.append("author", decoded._id);
-  images.forEach((image) => sendFormData.append("images", image));
+  const sendFormData = {
+    title: receivedFormData.get("title"),
+    address: receivedFormData.get("address"),
+    coordinate: receivedFormData.get("coordinate"),
+    description: receivedFormData.get("description"),
+    author: decoded._id,
+    images: images,
+  };
 
   try {
     const response = await api.patch(`/locations/${id}`, sendFormData, {
       headers: {
-        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       },
     });
@@ -65,7 +69,6 @@ export default function Edit() {
   const [state, dispatch] = useReducer(formReducer, initialState);
   const navigate = useNavigate();
 
-  // _id is needed
   useEffect(() => {
     if (!username) {
       navigate("/login");
@@ -82,20 +85,46 @@ export default function Edit() {
       coordinate: data.coordinate,
       description: data.description,
     };
-    setImages(data.images)
+    setImages(data.images);
     dispatch({ type: "SET_NEW_INITIAL", payload: newInitialState });
-    console.log("테스트", state);
   }, [data]);
 
-
-  const handleImages = (e) => {
+  const handleImages = async (e) => {
     const files = e.target.files;
     const filesArray = Array.from(files);
-    setImages([...images, ...filesArray]);
+    
+    const formData = new FormData();
+    filesArray.forEach((file) => formData.append("images", file));
+
+    try {
+      const response = await api.post("/locations/images", formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      const result = response.data;
+      setImages([...images, ...result]);
+    } catch (error) {
+      console.error("Image upload failed", error);
+    }
   };
 
-  const deleteImage = (index) => {
-    setImages(images.filter((_, i) => i !== index));
+  const handleDeleteImage = async (index) => {
+    try {
+      const imageToDelete = images[index];
+      await api.delete("/locations/images", {
+        data: { imagesToDelete: [imageToDelete] },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      setImages(images.filter((_, i) => i !== index));
+    } catch (error) {
+      console.error("Error deleting image:", error);
+    }
+    
   };
 
   return (
@@ -129,12 +158,18 @@ export default function Edit() {
               <Button className="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300">
                 수정
               </Button>
-              <NavButton className='w-26' to={`/locations/${data._id}`}>돌아가기</NavButton>
+              <NavButton className="w-26" to={`/locations/${data._id}`}>
+                돌아가기
+              </NavButton>
             </div>
           </LocationForm>
         </div>
 
-        <ImagesPreview className="p-4 flex flex-wrap gap-4" images={images} deleteImage={deleteImage} />
+        <ImagesPreview
+          className="p-4 flex flex-wrap gap-4"
+          images={images}
+          handleDeleteImage={handleDeleteImage}
+        />
       </section>
     </>
   );

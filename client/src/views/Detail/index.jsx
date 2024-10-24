@@ -79,12 +79,12 @@ export default function Detail() {
   }
 
   return (
-    <div className="mt-4 p-4 container lg:max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+    <section className="mt-4 p-4 container lg:max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
       <LocationCard data={data} />
       <div>
         <ReviewForm locationId={data._id} />
         <ReviewList reviews={data.reviews} locationId={data._id} />
       </div>
-    </div>
+    </section>
   );
 }

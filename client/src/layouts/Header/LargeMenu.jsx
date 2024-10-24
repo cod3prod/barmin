@@ -73,6 +73,12 @@ export default function LargeMenu({ toggleMenu, username }) {
               >
                 NEW
               </NavLink>
+              <NavLink
+                className="box-border w-20 h-full flex justify-center items-center mr-auto font-bold border-t-4 border-b-4 border-transparent hover:border-b-white"
+                to="/profile"
+              >
+                PROFILE
+              </NavLink>
             </div>
             <div className="flex space-x-4 ml-auto">
               {!username ? (
