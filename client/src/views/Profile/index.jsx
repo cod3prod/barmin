@@ -1,6 +1,6 @@
 import { useState, useReducer } from "react";
 import { initialState, profileReducer } from "../../reducer/profileReducer";
-import { redirect, useLoaderData, useNavigate } from "react-router-dom";
+import { redirect, useLoaderData, Navigate } from "react-router-dom";
 import { flashStore } from "../../zustand/FlashStore";
 import { authStore } from "../../zustand/AuthStore";
 import api from "../../config/api";
@@ -111,24 +111,16 @@ export default function Profile() {
   const data = useLoaderData();
   const [isOpen, setIsOpen] = useState(false);
   const [state, dispatch] = useReducer(profileReducer, initialState);
-  const { username } = authStore();
-  const navigate = useNavigate();
+  const { isAuthenticated } = authStore();
+
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
 
   useEffect(() => {
-    if (!username) {
-      navigate("/login");
-      return;
-    }
-
     if (data && data.user) {
       dispatch({ type: "SET_EMAIL", payload: data.user.email });
       dispatch({ type: "SET_USERNAME", payload: data.user.username });
     }
-  }, [username, data, navigate]);
-
-  if (!data) {
-    return null;
-  }
+  }, [data]);
 
   return (
     <section className="mt-4 p-4 container lg:max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">

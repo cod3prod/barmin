@@ -18,7 +18,7 @@ const convertImages = (req, res) => {
 const deleteImages = (req, res) => {
   console.log("images deleted");
   res.status(200).json({ message: "Images deleted successfully" });
-}
+};
 
 const create = async (req, res) => {
   const location = new Location(req.body);
@@ -37,18 +37,12 @@ const getWithReviews = async (req, res) => {
 
 const update = async (req, res) => {
   const { id } = req.params;
-  const images = [];
-  for (let i = 0; i < req.files.length; i++) {
-    const image = {
-      url: req.results[i].secure_url,
-      public_id: req.results[i].public_id,
-    };
-    images.push(image);
-  }
-  await Location.findByIdAndUpdate(id, {
-    ...req.body,
-    images: images,
-  });
+  console.log('테스트', id);
+  await Location.findByIdAndUpdate(
+    id,
+    { ...req.body },
+    { new: true, upsert: false }
+  );
   console.log(`${id} updated successfully`);
   res.json({ message: "Successfully updated the location" });
 };
@@ -65,4 +59,13 @@ const getDetails = async (req, res) => {
   res.json(location);
 };
 
-export default { getAll, create, getWithReviews, update, remove, getDetails, convertImages, deleteImages };
+export default {
+  getAll,
+  create,
+  getWithReviews,
+  update,
+  remove,
+  getDetails,
+  convertImages,
+  deleteImages,
+};

@@ -10,6 +10,11 @@ import { port, DB_URL, SESSION_SECRET } from "./config/config.js";
 import userRoutes from './routes/users.js';
 import locationRoutes from "./routes/locations.js";
 import reviewRoutes from "./routes/reviews.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 mongoose
   .connect(DB_URL)
@@ -44,9 +49,12 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use("/users", userRoutes)
-app.use("/locations", locationRoutes);
-app.use("/locations/:id/reviews", reviewRoutes);
+app.use("/api/users", userRoutes)
+app.use("/api/locations", locationRoutes);
+app.use("/api/locations/:id/reviews", reviewRoutes);
+
+app.use(express.static(path.join(__dirname, "/client/dist")));
+app.get("*", (req, res) => res.sendFile(path.join(__dirname + "/client/dist/index.html")));
 
 app.all("*", (req, res, next) => {
   next(new AppError("Page Not Found", 404));
@@ -54,7 +62,7 @@ app.all("*", (req, res, next) => {
 
 app.use((err, req, res, next) => {
   const { statusCode = 500 } = err;
-  if (!err.message) err.message = "무언가 잘못되었습니다ㅠㅠ";
+  if (!err.message) err.message = "Something went wrong.";
   console.log(err)
   res.status(statusCode).json({ success: false, err });
 });

@@ -22,9 +22,8 @@ export async function action({ request }) {
     localStorage.setItem("token", result.token);
     const decoded = jwtDecode(result.token);
     authStore.setState({
-      _id: decoded._id,
+      isAuthenticated: true,
       username: decoded.username,
-      role: decoded.role,
     });
     flashStore.setState({
       type: "success",

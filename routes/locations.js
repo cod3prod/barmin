@@ -34,9 +34,6 @@ router
   .patch(
     authenticateToken,
     isAuthor,
-    upload.array("images"),
-    deleteHandler,
-    uploadHandler,
     validateLocation,
     wrapAsync(locations.update)
   )

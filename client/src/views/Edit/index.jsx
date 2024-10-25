@@ -1,9 +1,9 @@
-import React, { useEffect, useReducer, useLayoutEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import {
   redirect,
   useLoaderData,
   useNavigation,
-  useNavigate,
+  Navigate,
 } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import api from "../../config/api";
@@ -16,6 +16,7 @@ import LocationForm from "../../components/LocationForm";
 import Button from "../../components/Button";
 import NavButton from "../../components/NavButton";
 import ImagesPreview from "../../components/ImagesPreview";
+import { set } from "mongoose";
 
 export async function loader({ params }) {
   const { id } = params;
@@ -65,20 +66,16 @@ export async function action({ request, params }) {
 export default function Edit() {
   const data = useLoaderData();
   const { images, setImages } = imagesStore();
-  const { username } = authStore();
+  const { isAuthenticated } = authStore();
   const [state, dispatch] = useReducer(formReducer, initialState);
-  const navigate = useNavigate();
+  const [isHandlingImg, setIsHandlingImg] = useState(false);
 
-  useEffect(() => {
-    if (!username) {
-      navigate("/login");
-    }
-  }, [username]);
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
 
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const newInitialState = {
       title: data.title,
       address: data.address,
@@ -92,25 +89,29 @@ export default function Edit() {
   const handleImages = async (e) => {
     const files = e.target.files;
     const filesArray = Array.from(files);
-    
+
     const formData = new FormData();
     filesArray.forEach((file) => formData.append("images", file));
-
+    
+    setIsHandlingImg(true);
     try {
       const response = await api.post("/locations/images", formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "multipart/form-data",
         },
-      })
+      });
       const result = response.data;
       setImages([...images, ...result]);
     } catch (error) {
       console.error("Image upload failed", error);
+    } finally {
+      setIsHandlingImg(false);
     }
   };
 
   const handleDeleteImage = async (index) => {
+    setIsHandlingImg(true);
     try {
       const imageToDelete = images[index];
       await api.delete("/locations/images", {
@@ -119,17 +120,17 @@ export default function Edit() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-
       setImages(images.filter((_, i) => i !== index));
     } catch (error) {
       console.error("Error deleting image:", error);
+    } finally {
+      setIsHandlingImg(false);
     }
-    
   };
 
   return (
     <>
-      {isSubmitting && <Submitting />}
+      {(isHandlingImg || isSubmitting) && <Submitting />}
       <section className="mt-6 container mx-auto lg:max-w-7xl ">
         <div className="flex justify-center mb-6">
           <h1 className="text-2xl font-bold text-center">장소 정보 편집</h1>
@@ -153,6 +154,8 @@ export default function Edit() {
             state={state}
             dispatch={dispatch}
             handleImages={handleImages}
+            method="PATCH"
+            action={`/locations/${data._id}/edit`}
           >
             <div className="mt-4 flex justify-between mb-4">
               <Button className="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300">

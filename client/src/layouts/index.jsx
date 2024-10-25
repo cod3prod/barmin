@@ -2,23 +2,30 @@ import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
 import Header from "./Header";
 import { authStore } from "../zustand/AuthStore";
+import { flashStore } from "../zustand/FlashStore";
 import api from "../config/api";
 import Flash from "../components/Flash";
 
 export async function action() {
-  const { setName } = authStore.getState();
-
   await api
     .post("users/logout")
     .then((res) => {
-      // 로그아웃 성공 플래시 메시지 만들기
       localStorage.removeItem("token");
-      setName("");
+      authStore.setState({ isAuthenticated: false, username: "" });
+      flashStore.setState({
+        type: "success",
+        message: "로그아웃을 성공하셨습니다.",
+        isOpen: true,
+      });
       console.log("Logout successful", res.data);
       return null;
     })
     .catch((err) => {
-      // 로그아웃 실패 플래시 메시지 만들기
+      flashStore.setState({
+        type: "error",
+        message: "로그아웃을 실패하셨습니다.",
+        isOpen: true,
+      });
       console.error("Logout error", err);
       return null;
     });

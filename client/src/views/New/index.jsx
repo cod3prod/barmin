@@ -1,8 +1,9 @@
-import { redirect, useNavigate, useNavigation } from "react-router-dom";
+import { useState } from "react";
+import { redirect, useNavigation, Navigate } from "react-router-dom";
 import KakaoMap from "../../components/KakaoMap";
 import Button from "../../components/Button";
 import NavButton from "../../components/NavButton";
-import { useLayoutEffect, useReducer } from "react";
+import { useReducer } from "react";
 import api from "../../config/api";
 import { jwtDecode } from "jwt-decode";
 import Submitting from "../../components/Submitting";
@@ -10,6 +11,7 @@ import { formReducer, initialState } from "../../reducer/formReducer";
 import LocationForm from "../../components/LocationForm";
 import ImagesPreview from "../../components/ImagesPreview";
 import { imagesStore } from "../../zustand/ImagesStore";
+import { authStore } from "../../zustand/AuthStore";
 
 export async function action({ request }) {
   const token = localStorage.getItem("token");
@@ -44,19 +46,13 @@ export async function action({ request }) {
 
 export default function New() {
   const [state, dispatch] = useReducer(formReducer, initialState);
+  const [ isHandlingImg, setIsHandlingImg ] = useState(false);
   const { images, setImages } = imagesStore();
+  const { isAuthenticated } = authStore();
   const navigation = useNavigation();
-  const navigate = useNavigate();
   const isSubmitting = navigation.state === "submitting";
 
-  useLayoutEffect(() => {
-    setImages([]);
-    const token = localStorage.getItem("token");
-    const decoded = jwtDecode(token);
-    if (!decoded.username) {
-      navigate("/login");
-    }
-  }, [navigate]);
+  if(!isAuthenticated) return <Navigate to="/login" replace />;
 
   const handleImages = async (e) => {
     const files = e.target.files;
@@ -64,8 +60,9 @@ export default function New() {
 
     const formData = new FormData();
     filesArray.forEach((file) => formData.append("images", file));
-
+    setIsHandlingImg(true);
     try {
+      setIsHandlingImg(true);
       const response = await api.post("/locations/images", formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -76,10 +73,13 @@ export default function New() {
       setImages([...images, ...result]);
     } catch (error) {
       console.error("Image upload failed", error);
+    } finally {
+      setIsHandlingImg(false);
     }
   };
 
   const handleDeleteImage = async (index) => {
+    setIsHandlingImg(true);
     try {
       const imageToDelete = images[index];
       await api.delete("/locations/images", {
@@ -92,12 +92,14 @@ export default function New() {
       setImages(images.filter((_, i) => i !== index));
     } catch (error) {
       console.error("Error deleting image:", error);
+    } finally {
+      setIsHandlingImg(false);
     }
   };
 
   return (
     <>
-      {isSubmitting && <Submitting />}
+      { (isHandlingImg||isSubmitting) && <Submitting />}
       <section className="mt-4 flex flex-col container lg:max-w-7xl mx-auto">
         <div className="px-4 pt-4 flex justify-center">
           <h1 className="text-2xl font-bold">새로운 장소 등록</h1>
@@ -121,6 +123,8 @@ export default function New() {
             state={state}
             dispatch={dispatch}
             handleImages={handleImages}
+            method="POST"
+            action="/locations/new"
           >
             <div className="flex justify-between my-4">
               <Button className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300">

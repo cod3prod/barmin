@@ -5,11 +5,14 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
+import { authStore } from "../../zustand/AuthStore";
 import { FiMenu } from "react-icons/fi";
 
-export default function LargeMenu({ toggleMenu, username }) {
+export default function LargeMenu({ toggleMenu }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { username } = authStore();
+
   const handleClick = () => {
     if (location.pathname === "/") {
       window.scrollTo({

@@ -1,7 +1,10 @@
 import { NavLink, Link, Form } from "react-router-dom";
+import { authStore } from "../../zustand/AuthStore";
 import { FiMenu, FiX, FiLogIn, FiLogOut, FiUserPlus } from "react-icons/fi";
 
-export default function SmallMenu({ isMenuOpen, toggleMenu, username }) {
+export default function SmallMenu({ isMenuOpen, toggleMenu}) {
+  const { username } = authStore();
+
   return (
     <nav className="bg-black text-white lg:hidden">
       <div className="h-16 w-full px-4 flex justify-between">

@@ -10,14 +10,13 @@ export default function LocationForm(props) {
     dispatch,
     handleImages,
     children,
+    ...rest
   } = props;
 
   return (
     <Form
       className={className}
-      method="POST"
-      action="/locations/new"
-      encType="multipart/form-data"
+      {...rest}
     >
       <div className="flex flex-col gap-3">
         <Input id="title" value={state.title} onChange={(e)=> dispatch({ type: "SET_TITLE", payload: e.target.value})}>

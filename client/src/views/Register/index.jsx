@@ -22,7 +22,7 @@ export async function action({ request }) {
     const result = response.data;
     localStorage.setItem("token", result.token);
     const decoded = jwtDecode(result.token);
-    authStore.setState({ _id: decoded._id, username: decoded.username, role: decoded.role });
+    authStore.setState({ isAuthenticated: true, username: decoded.username });
     flashStore.setState({
       type: "success",
       message: "성공적으로 가입하셨습니다!",
