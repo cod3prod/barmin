@@ -14,10 +14,9 @@ export default function RegisterForm({ setOnFocus }) {
       return dispatch({ type: "SET_CHECK_USERNAME", payload: null });
     }
     try {
-      const response = await api.get(`/users/check-duplication/`, {
+      await api.get(`/users/check-duplication/`, {
         params: { username },
       });
-      console.log(response);
       return dispatch({ type: "SET_CHECK_USERNAME", payload: true });
     } catch (error) {
       return dispatch({ type: "SET_CHECK_USERNAME", payload: false });
@@ -32,10 +31,9 @@ export default function RegisterForm({ setOnFocus }) {
       return dispatch({ type: "SET_CHECK_EMAIL", payload: false });
     }
     try {
-      const response = await api.get(`/users/check-duplication/`, {
+      await api.get(`/users/check-duplication/`, {
         params: { email },
       });
-      console.log(response);
       return dispatch({ type: "SET_CHECK_EMAIL", payload: true });
     } catch (error) {
       return dispatch({ type: "SET_CHECK_EMAIL", payload: false });
@@ -75,7 +73,7 @@ export default function RegisterForm({ setOnFocus }) {
         </Input>
         <p
           className={twMerge(
-            "text-xs h-3 transform -translate-y-1.5",
+            "text-xs h-3 transform md:-translate-y-3",
             state.checkUsername ? "text-green-500" : "text-red-500"
           )}
         >
@@ -109,7 +107,7 @@ export default function RegisterForm({ setOnFocus }) {
         </Input>
         <p
           className={twMerge(
-            "text-xs h-3 transform -translate-y-1.5",
+            "text-xs h-3 transform md:-translate-y-3",
             state.checkEmail ? "text-green-500" : "text-red-500"
           )}
         >

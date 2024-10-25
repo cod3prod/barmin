@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { redirect } from "react-router-dom";
+import { redirect, useNavigation } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import { jwtDecode } from "jwt-decode";
 import { authStore } from "../../zustand/AuthStore";
@@ -8,6 +8,7 @@ import api from "../../config/api";
 import RegisterForm from "./RegisterForm";
 import RegisterBackground from "./RegisterBackground";
 import RegisterTypo from "./RegisterTypo";
+import Submitting from "../../components/Submitting";
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -42,20 +43,26 @@ export async function action({ request }) {
 
 export default function Register() {
   const [onFocus, setOnFocus] = useState(false);
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
   return (
-    <section>
-      <div className="flex p-4 absolute w-full max-w-7xl h-2/3 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-auto">
-        <RegisterBackground />
-        <RegisterTypo />
-        <div
-          className={twMerge(
-            "relative z-10 w-full max-w-md mx-auto h-full md:w-1/2 p-4 shadow-md rounded-lg transition-colors duration-300",
-            onFocus ? "bg-white" : "bg-[rgba(255,255,255,0.8)]"
-          )}
-        >
-          <RegisterForm setOnFocus={setOnFocus} />
+    <>
+      {isSubmitting && <Submitting />}
+      <section>
+        <div className="flex p-4 absolute w-full max-w-7xl h-2/3 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-auto">
+          <RegisterBackground />
+          <RegisterTypo />
+          <div
+            className={twMerge(
+              "relative z-10 w-full max-w-md mx-auto h-full md:w-1/2 p-4 shadow-md rounded-lg transition-colors duration-300",
+              onFocus ? "bg-white" : "bg-[rgba(255,255,255,0.8)]"
+            )}
+          >
+            <RegisterForm setOnFocus={setOnFocus} />
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
