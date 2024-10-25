@@ -4,10 +4,10 @@ import { flashStore } from "../zustand/FlashStore";
 import 'animate.css';
 
 export default function Flash() {
-  const { type, message, isOpen, setIsOpen} = flashStore();
+  const { type, message, isOpen, setFlash } = flashStore();
 
   const closeModal = () => {
-    setIsOpen(false);
+    setFlash("", "", false);
   };
 
   const handleModalClick = (event) => {

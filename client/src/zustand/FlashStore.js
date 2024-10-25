@@ -4,9 +4,7 @@ const flashStore = create((set)=>({
     message: "",
     type: "", // success, error, warning
     isOpen: false,
-    setMessage: (newMessage) => set({message: newMessage}),
-    setType: (newType) => set({type: newType}),
-    setIsOpen: (newIsOpen) => set({isOpen: newIsOpen}), 
+    setFlash: (newMessage, newType, newIsOpen) => set({message: newMessage, type: newType, isOpen: newIsOpen}), 
 }))
 
 export { flashStore };

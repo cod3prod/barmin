@@ -9,6 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import api from "../../config/api";
 import { imagesStore } from "../../zustand/ImagesStore";
 import { authStore } from "../../zustand/AuthStore";
+import { flashStore } from "../../zustand/FlashStore";
 import KakaoMap from "../../components/KakaoMap";
 import Submitting from "../../components/Submitting";
 import { formReducer, initialState } from "../../reducer/formReducer";
@@ -66,10 +67,23 @@ export default function Edit() {
   const data = useLoaderData();
   const { images, setImages } = imagesStore();
   const { isAuthenticated } = authStore();
+  const { setFlash } = flashStore();
+  const [isRedirect, setIsRedirect] = useState(false);
   const [state, dispatch] = useReducer(formReducer, initialState);
   const [isHandlingImg, setIsHandlingImg] = useState(false);
 
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  useEffect(() => {
+    if(!isAuthenticated) {
+      setFlash("로그인을 해주세요.", "warning", true);
+      setIsRedirect(true);
+    } else {
+      const decoded = jwtDecode(localStorage.getItem("token"));
+      if(data.author !== decoded._id) {
+        setFlash("작성자가 아닙니다.", "warning", true);
+        setIsRedirect(true);
+      }
+    }
+  }, [])
 
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
@@ -91,7 +105,7 @@ export default function Edit() {
 
     const formData = new FormData();
     filesArray.forEach((file) => formData.append("images", file));
-    
+
     setIsHandlingImg(true);
     try {
       const response = await api.post("/locations/images", formData, {
@@ -130,6 +144,9 @@ export default function Edit() {
   return (
     <>
       {(isHandlingImg || isSubmitting) && <Submitting />}
+      {isRedirect && data?._id && (
+        <Navigate to={`/locations/${data._id}`} replace />
+      )}
       <section className="mt-6 container mx-auto lg:max-w-7xl ">
         <div className="flex justify-center mb-6">
           <h1 className="text-2xl font-bold text-center">장소 정보 편집</h1>
@@ -141,13 +158,12 @@ export default function Edit() {
               dispatch={dispatch}
               centerChangeLimit={3}
               style={{
-                // 지도의 크기
                 width: "100%",
                 height: "100%",
               }}
             />
           </div>
-
+  
           <LocationForm
             className="w-full lg:w-2/5"
             state={state}
@@ -166,7 +182,7 @@ export default function Edit() {
             </div>
           </LocationForm>
         </div>
-
+  
         <ImagesPreview
           className="p-4 flex flex-wrap gap-4"
           images={images}

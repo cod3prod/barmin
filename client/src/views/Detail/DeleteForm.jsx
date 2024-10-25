@@ -2,7 +2,7 @@ import { Form } from "react-router-dom";
 import NavButton from "../../components/NavButton";
 import Button from "../../components/Button";
 
-export default function DeleteForm({data}) {
+export default function DeleteForm({ data }) {
   return (
     <div className="flex justify-between p-4">
       <NavButton to={`/locations/${data._id}/edit`}>수정</NavButton>
