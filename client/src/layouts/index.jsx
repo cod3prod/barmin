@@ -12,11 +12,6 @@ export async function action() {
     .then((res) => {
       localStorage.removeItem("token");
       authStore.setState({ isAuthenticated: false, username: "" });
-      flashStore.setState({
-        type: "success",
-        message: "로그아웃을 성공하셨습니다.",
-        isOpen: true,
-      });
       console.log("Logout successful", res.data);
       return null;
     })

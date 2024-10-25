@@ -1,18 +1,20 @@
 import { RouterProvider } from "react-router-dom";
 import router from "./routes";
-import { jwtDecode } from "jwt-decode"; // 잘못된 import 수정
+import { jwtDecode } from "jwt-decode";
 import { useLayoutEffect } from "react";
 import { authStore } from "./zustand/AuthStore";
 import api from "./config/api";
 
 export default function App() {
-  const { username, setName } = authStore();
+  const { login, logout, setName } = authStore();
 
   useLayoutEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       console.log("No token, user is not logged in.");
-      return; // 토큰이 없으면 종료
+      login();
+      setName("");
+      return;
     }
 
     try {
@@ -21,9 +23,9 @@ export default function App() {
 
       if (decoded.exp > currentTime) {
         console.log("token is not expired");
+        login();
         setName(decoded.username);
 
-        // 토큰이 유효할 때만 주기적으로 갱신 요청
         const interval = setInterval(async () => {
           try {
             const response = await api.get("/users/validate", {
@@ -32,12 +34,14 @@ export default function App() {
               },
             });
             const newToken = response.data.token;
-            localStorage.setItem("token", newToken); // 새 토큰 저장
-            setName(jwtDecode(newToken).username); // 새 토큰에서 username 가져오기
+            localStorage.setItem("token", newToken); 
+            login();
+            setName(jwtDecode(newToken).username);
           } catch (error) {
             console.error("Failed to validate token:", error);
             localStorage.removeItem("token");
-            setName(null);
+            logout();
+            setName("");
           }
         }, 15 * 60 * 1000); // 15분마다 토큰 갱신
 
@@ -45,12 +49,14 @@ export default function App() {
       } else {
         console.log("token is expired");
         localStorage.removeItem("token");
-        setName(null);
+        logout();
+        setName("");
       }
     } catch (error) {
       console.error("Error decoding token:", error);
       localStorage.removeItem("token");
-      setName(null);
+      logout();
+      setName("");
     }
   }, []);
 

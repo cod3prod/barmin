@@ -6,7 +6,7 @@ export default function ImagesPreview({className, images, handleDeleteImage}) {
       {images.map((image, index) => (
         <div key={index} className="flex flex-col">
           <img
-            src={image.url ||URL.createObjectURL(image)}
+            src={image.url}
             alt={`Preview ${index}`}
             className="w-full h-32 object-cover rounded"
           />

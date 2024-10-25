@@ -25,11 +25,6 @@ export async function action({ request }) {
       isAuthenticated: true,
       username: decoded.username,
     });
-    flashStore.setState({
-      type: "success",
-      message: "로그인을 성공하셨습니다!",
-      isOpen: true,
-    });
     console.log("Login successful", result);
     return redirect("/locations");
   } catch (error) {

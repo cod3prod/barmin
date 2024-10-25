@@ -65,7 +65,7 @@ export default function KakaoCluster(props) {
           width: "100%",
           height: "100%",
         }}
-        level={Object.keys(state.coordinate).length !== 0 ? 7 : 13} // 지도의 확대 레벨
+        level={13} // 지도의 확대 레벨
         ref={mapRef}
         onZoomChanged={getMapInfo}
         // onCenterChanged={getMapInfo}
