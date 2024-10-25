@@ -1,8 +1,9 @@
 import { NavLink, Link, Form } from "react-router-dom";
 import { authStore } from "../../zustand/AuthStore";
 import { FiMenu, FiX, FiLogIn, FiLogOut, FiUserPlus } from "react-icons/fi";
+import SidebarLink from "./SidebarLink";
 
-export default function SmallMenu({ isMenuOpen, toggleMenu}) {
+export default function SmallMenu({ isMenuOpen, toggleMenu }) {
   const { username } = authStore();
 
   return (
@@ -53,42 +54,18 @@ export default function SmallMenu({ isMenuOpen, toggleMenu}) {
 
           {/* 메뉴 */}
           <ul className="mt-6 space-y-4">
-            <li>
-              <NavLink
-                to="/"
-                className="text-white hover:text-gray-300"
-                onClick={toggleMenu}
-              >
-                HOME
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/locations"
-                className="text-white hover:text-gray-300"
-                onClick={toggleMenu}
-              >
-                MAP
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/locations/new"
-                className="text-white hover:text-gray-300"
-                onClick={toggleMenu}
-              >
-                NEW
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/profile"
-                className="text-white hover:text-gray-300"
-                onClick={toggleMenu}
-              >
-                PROFILE
-              </NavLink>
-            </li>
+            <SidebarLink to="/" onClick={toggleMenu} end>
+              HOME
+            </SidebarLink>
+            <SidebarLink to="/locations" onClick={toggleMenu}>
+              MAP
+            </SidebarLink>
+            <SidebarLink to="/locations/new" onClick={toggleMenu} end>
+              NEW
+            </SidebarLink>
+            <SidebarLink to="/profile" onClick={toggleMenu} end>
+              PROFILE
+            </SidebarLink>
           </ul>
         </div>
       </div>

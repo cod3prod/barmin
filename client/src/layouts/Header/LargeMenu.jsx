@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { authStore } from "../../zustand/AuthStore";
 import { FiMenu } from "react-icons/fi";
+import MenuLink from "./MenuLink";
 
 export default function LargeMenu({ toggleMenu }) {
   const navigate = useNavigate();
@@ -56,32 +57,10 @@ export default function LargeMenu({ toggleMenu }) {
               <FiMenu size={30} />
             </button>
             <div className="h-full flex space-x-4">
-              <NavLink
-                className="box-border w-20 h-full flex justify-center items-center mr-auto font-bold border-t-4 border-b-4 border-transparent hover:border-b-white"
-                to="/"
-                end
-              >
-                HOME
-              </NavLink>
-              <NavLink
-                className="box-border w-20 h-full flex justify-center items-center mr-auto font-bold border-t-4 border-b-4 border-transparent hover:border-b-white"
-                to="/locations"
-                end
-              >
-                MAP
-              </NavLink>
-              <NavLink
-                className="box-border w-20 h-full flex justify-center items-center mr-auto font-bold border-t-4 border-b-4 border-transparent hover:border-b-white"
-                to="/locations/new"
-              >
-                NEW
-              </NavLink>
-              <NavLink
-                className="box-border w-20 h-full flex justify-center items-center mr-auto font-bold border-t-4 border-b-4 border-transparent hover:border-b-white"
-                to="/profile"
-              >
-                PROFILE
-              </NavLink>
+              <MenuLink to="/" end>HOME</MenuLink>
+              <MenuLink to="/locations">MAP</MenuLink>
+              <MenuLink to="/locations/new" end>NEW</MenuLink>
+              <MenuLink to="/profile" end>PROFILE</MenuLink>
             </div>
             <div className="flex space-x-4 ml-auto">
               {!username ? (
