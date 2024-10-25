@@ -1,3 +1,4 @@
+import { redirect } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -13,7 +14,7 @@ export async function action() {
       localStorage.removeItem("token");
       authStore.setState({ isAuthenticated: false, username: "" });
       console.log("Logout successful", res.data);
-      return null;
+      return redirect("/");
     })
     .catch((err) => {
       flashStore.setState({
