@@ -16,7 +16,6 @@ import LocationForm from "../../components/LocationForm";
 import Button from "../../components/Button";
 import NavButton from "../../components/NavButton";
 import ImagesPreview from "../../components/ImagesPreview";
-import { set } from "mongoose";
 
 export async function loader({ params }) {
   const { id } = params;
