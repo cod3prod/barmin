@@ -35,7 +35,7 @@ export default function LoginForm({ setOnFocus }) {
         </Input>
       </div>
       <div className="mt-9 flex flex-col gap-4 items-center">
-        <Button className="text-sm lg:text-lg h-18 w-full bg-green-500 text-white rounded-md hover:bg-green-600">
+        <Button className="text-sm lg:text-lg h-18 w-full bg-green-500 text-white rounded-md hover:bg-green-600 focus:ring-4 focus:ring-green-300">
           로그인
         </Button>
         <NavButton

@@ -52,6 +52,7 @@ export default function New() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
+  console.log(isAuthenticated);
   if(!isAuthenticated) return <Navigate to="/login" replace />;
 
   const handleImages = async (e) => {

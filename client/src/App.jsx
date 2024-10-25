@@ -1,18 +1,18 @@
 import { RouterProvider } from "react-router-dom";
 import router from "./routes";
 import { jwtDecode } from "jwt-decode";
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { authStore } from "./zustand/AuthStore";
 import api from "./config/api";
 
 export default function App() {
   const { login, logout, setName } = authStore();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       console.log("No token, user is not logged in.");
-      login();
+      logout();
       setName("");
       return;
     }

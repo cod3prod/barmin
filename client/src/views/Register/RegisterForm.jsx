@@ -50,7 +50,7 @@ export default function RegisterForm({ setOnFocus }) {
       noValidate
     >
       <p className="text-2xl font-bold mt-6 mb-6">Register</p>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-0 md:gap-4">
         <Input
           type="text"
           id="username"
@@ -79,7 +79,11 @@ export default function RegisterForm({ setOnFocus }) {
             state.checkUsername ? "text-green-500" : "text-red-500"
           )}
         >
-          {state.username === "" ? "" : state.checkUsername ? "사용가능한 Username입니다!" : "다른 Username을 입력해주세요."}
+          {state.username === ""
+            ? ""
+            : state.checkUsername
+            ? "사용가능한 Username입니다!"
+            : "다른 Username을 입력해주세요."}
         </p>
         <Input
           type="email"
@@ -109,7 +113,11 @@ export default function RegisterForm({ setOnFocus }) {
             state.checkEmail ? "text-green-500" : "text-red-500"
           )}
         >
-          {state.email === "" ? "" : state.checkEmail ? "사용 가능한 Email입니다!" : "다른 Email를 입력해주세요."}
+          {state.email === ""
+            ? ""
+            : state.checkEmail
+            ? "사용 가능한 Email입니다!"
+            : "다른 Email를 입력해주세요."}
         </p>
         <Input
           type="password"
@@ -125,8 +133,8 @@ export default function RegisterForm({ setOnFocus }) {
           Password
         </Input>
       </div>
-      <div className="mt-9 flex flex-col gap-4 items-center">
-        <Button className="text-sm lg:text-lg h-18 w-full bg-green-500 text-white rounded-md hover:bg-green-600">
+      <div className="mt-3 md:mt-9 flex flex-col gap-4 items-center">
+        <Button className="text-sm lg:text-lg h-18 w-full bg-green-500 text-white rounded-md hover:bg-green-600 focus:ring-4 focus:ring-green-300">
           등록
         </Button>
       </div>
