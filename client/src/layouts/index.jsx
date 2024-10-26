@@ -1,5 +1,4 @@
-import { redirect } from "react-router-dom";
-import { Outlet } from "react-router-dom";
+import { redirect, Outlet } from "react-router-dom";
 import Footer from "./Footer";
 import Header from "./Header";
 import { authStore } from "../zustand/AuthStore";
