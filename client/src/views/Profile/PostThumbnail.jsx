@@ -2,7 +2,7 @@ import { useState } from 'react';
 import ImageSkeleton from '../../components/ImageSkeleton';
 import { CiFileOff } from "react-icons/ci";
 
-export default function LocationImage({ src, alt }) {
+export default function PostThumbnail({ src, alt }) {
       const [isLoading, setIsLoading] = useState(true);
       const [isError, setIsError] = useState(false);
 

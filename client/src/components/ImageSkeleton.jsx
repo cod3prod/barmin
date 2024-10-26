@@ -2,8 +2,8 @@ import { twMerge } from "tailwind-merge";
 
 export default function ImageSkeleton({ className, height }) {
   return (
-    <div role="status" className={twMerge("max-w-sm border border-gray-300 rounded-lg p-4", className)}>
-      <div className={twMerge("animate-pulse w-full bg-gray-300 h-48 rounded-lg mb-5 flex justify-center items-center", height)}>
+    <div role="status" className={twMerge("border border-gray-300 rounded-lg p-4", className)}>
+      <div className={twMerge("animate-pulse w-full bg-gray-300 h-48 rounded-lg flex justify-center items-center", height)}>
         <svg
           className="w-8 h-8 stroke-gray-400"
           viewBox="0 0 24 24"

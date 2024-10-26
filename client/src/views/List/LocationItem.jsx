@@ -13,7 +13,7 @@ export default function LocationItem({ location }) {
             <p className="truncate text-gray-500 text-xs">{location.address}</p>
             <NavButton
               to={`/locations/${location._id}`}
-              className="w-20 h-6 flex justify-center items-center text-xs bg-black hover:bg-gray-300 hover:text-black"
+              className="min-w-20 h-6 flex justify-center items-center text-xs bg-black hover:bg-gray-300 hover:text-black"
             >
               자세히
             </NavButton>
