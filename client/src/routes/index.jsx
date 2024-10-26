@@ -1,21 +1,30 @@
 import { createBrowserRouter } from "react-router-dom";
-import Layout, {action as layoutAction} from "../layouts";
+import Layout, { action as layoutAction } from "../layouts";
+import Error from "../views/Error";
+import NotFound from "../views/NotFound";
 import Home from "../views/Home";
-import Register, {action as registerAction} from "../views/Register";
+import Register, { action as registerAction } from "../views/Register";
 import Login, { action as loginAction } from "../views/Login";
 import List, { loader as listLoader } from "../views/List";
-import Detail, { loader as detailLoader, action as detailAction } from "../views/Detail";
+import Detail, {
+  loader as detailLoader,
+  action as detailAction,
+} from "../views/Detail";
 import Edit, {
   loader as editLoader,
   action as editAction,
 } from "../views/Edit";
-import New, { action as newAction} from "../views/New";
-import Profile, {loader as profileLoader, action as profileAction} from "../views/Profile";
+import New, { action as newAction } from "../views/New";
+import Profile, {
+  loader as profileLoader,
+  action as profileAction,
+} from "../views/Profile";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    errorElement: <Error />,
     action: layoutAction,
     children: [
       {
@@ -59,8 +68,12 @@ const router = createBrowserRouter([
         element: <Profile />,
         loader: profileLoader,
         action: profileAction,
-      }
+      },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 
