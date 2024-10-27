@@ -2,7 +2,6 @@ import Location from "../models/location.js";
 
 const getAll = async (req, res) => {
   const locations = await Location.find({});
-  console.log("locations loaded");
   res.json(locations);
 };
 
@@ -36,8 +35,7 @@ const getWithReviews = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  const { id } = req.params;
-  console.log('테스트', id);
+  const { id } = req.params;  
   await Location.findByIdAndUpdate(
     id,
     { ...req.body },

@@ -43,13 +43,12 @@ const validateUser = (req, res, next) => {
 
 const authenticateToken = (req, res, next) => {
   const token = req.headers["authorization"]?.split(" ")[1];
-  console.log("token in middleware", token);
   if (!token) return res.sendStatus(401);
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
     req.user = user;
-    console.log(user, "user verified");
+    console.log(`${user.username}'s token verified`);
     next();
   });
 };

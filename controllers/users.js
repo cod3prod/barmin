@@ -40,7 +40,7 @@ const logout = (req, res) => {
       console.log("Logout error", err);
       return next(err);
     }
-    console.log("Logout successful");
+    console.log("Logout successful : sessionID", req.sessionID);
     res.json({ message: "Logout successful" });
   });
 };
@@ -53,42 +53,38 @@ const getUserInfo = async (req, res) => {
 
 const changePassword = async (req, res) => {
   const { password: oldPassword, newPassword } = req.body;
-  console.log(req.user);
   const user = await User.findById(req.user._id);
   await user.changePassword(oldPassword, newPassword);
   await user.save();
+  console.log("Password changed : ", user.username);
   return res.status(200).json({ message: "Password changed successfully" });
 };
 
 const updateUserInfo = async (req, res) => {
-  console.log("업데이트", req.user);
   const { email } = req.body;
   const user = await User.findOneAndUpdate(
     { _id: req.user._id },
     { email },
     { new: true, runValidators: true }
   );
+  console.log("User info updated : ", req.user.username);
   res.status(200).json({ user });
 };
 
 const refreshToken = (req, res) => {
   const token = req.headers["authorization"]?.split(" ")[1];
-  console.log("token in controller", token);
-
   if (!token) return null;
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
 
     req.user = user;
-    console.log(user, "user verified");
-
     const newToken = jwt.sign(
       { _id: user._id, username: user.username, role: user.role },
       JWT_SECRET,
       { expiresIn: "2h" }
     );
-
+    console.log("Token refreshed : ", user.username);
     res.json({ token: newToken });
   });
 };
@@ -104,17 +100,16 @@ const isDuplicated = async (req, res) => {
   }
   const user = await User.findOne({ username });
   if (user) {
-    return res.status(400).json({ message: "Username already exists" })
+    return res.status(400).json({ message: "Username already exists" });
   }
-  return res.status(200).json({ message: "Username available" })
-}
-
-const deleteUser = async (req, res) => {
-  const { password } = req.body;
-  const user = await User.findByIdAndDelete(req.user._id);
-  res.status(200).json({ message: "User deleted successfully" });
+  return res.status(200).json({ message: "Username available" });
 };
 
+const deleteUser = async (req, res) => {
+  const user = await User.findByIdAndDelete(req.user._id);
+  console.log("User deleted : ", user.username);
+  res.status(200).json({ message: "User deleted successfully" });
+};
 
 export default {
   register,
@@ -125,5 +120,5 @@ export default {
   getUserInfo,
   refreshToken,
   isDuplicated,
-  deleteUser
+  deleteUser,
 };
