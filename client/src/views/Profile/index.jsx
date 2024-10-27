@@ -113,8 +113,6 @@ export default function Profile() {
   const [state, dispatch] = useReducer(profileReducer, initialState);
   const { isAuthenticated } = authStore();
 
-  if (!isAuthenticated) return <Navigate to="/login" />;
-
   useEffect(() => {
     if (data && data.user) {
       dispatch({ type: "SET_EMAIL", payload: data.user.email });
@@ -123,15 +121,21 @@ export default function Profile() {
   }, [data]);
 
   return (
-    <section className="mt-4 p-4 container lg:max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
-      <UserCard
-        user={data.user}
-        setIsOpen={setIsOpen}
-        state={state}
-        dispatch={dispatch}
-      />
-      <PostsList username={data.user.username} posts={data.locations} />
-      {isOpen && <ConfirmModal setIsOpen={setIsOpen} />}
-    </section>
+    <>
+      {!isAuthenticated ? (
+        <Navigate to="/login" />
+      ) : (
+        <section className="mt-4 p-4 container lg:max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+          <UserCard
+            user={data.user}
+            setIsOpen={setIsOpen}
+            state={state}
+            dispatch={dispatch}
+          />
+          <PostsList username={data.user.username} posts={data.locations} />
+          {isOpen && <ConfirmModal setIsOpen={setIsOpen} />}
+        </section>
+      )}
+    </>
   );
 }
