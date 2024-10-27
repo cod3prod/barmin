@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { redirect, useNavigation } from "react-router-dom";
+import { redirect, useNavigation, Navigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import { jwtDecode } from "jwt-decode";
 import { authStore } from "../../zustand/AuthStore";
@@ -43,6 +43,9 @@ export async function action({ request }) {
 
 export default function Register() {
   const [onFocus, setOnFocus] = useState(false);
+  const { isAuthenticated } = authStore((state) => state);
+  if (isAuthenticated) return <Navigate to="/" replace />;
+
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 

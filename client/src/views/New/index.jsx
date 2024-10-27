@@ -53,7 +53,7 @@ export default function New() {
   const isSubmitting = navigation.state === "submitting";
 
   console.log(isAuthenticated);
-  if(!isAuthenticated) return <Navigate to="/login" replace />;
+  if(!isAuthenticated) return <Navigate to="/login" />;
 
   const handleImages = async (e) => {
     const files = e.target.files;

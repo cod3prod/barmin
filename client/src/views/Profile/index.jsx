@@ -113,7 +113,7 @@ export default function Profile() {
   const [state, dispatch] = useReducer(profileReducer, initialState);
   const { isAuthenticated } = authStore();
 
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (!isAuthenticated) return <Navigate to="/login" />;
 
   useEffect(() => {
     if (data && data.user) {

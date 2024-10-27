@@ -1,64 +1,62 @@
 import { RouterProvider } from "react-router-dom";
 import router from "./routes";
 import { jwtDecode } from "jwt-decode";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { authStore } from "./zustand/AuthStore";
 import api from "./config/api";
 
 export default function App() {
   const { login, logout, setName } = authStore();
+  const [authLoaded, setAuthLoaded] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      console.log("No token, user is not logged in.");
-      logout();
-      setName("");
-      return;
-    }
 
-    try {
-      const decoded = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
+    const validateAndRefreshToken = async () => {
+      if (!token) {
+        logout();
+        setName("");
+        setAuthLoaded(true);
+        return;
+      }
 
-      if (decoded.exp > currentTime) {
-        console.log("token is not expired");
-        login();
-        setName(decoded.username);
+      try {
+        const decoded = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
 
-        const interval = setInterval(async () => {
-          try {
-            const response = await api.get("/users/validate", {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            const newToken = response.data.token;
-            localStorage.setItem("token", newToken); 
-            login();
-            setName(jwtDecode(newToken).username);
-          } catch (error) {
-            console.error("Failed to validate token:", error);
-            localStorage.removeItem("token");
-            logout();
-            setName("");
-          }
-        }, 15 * 60 * 1000); // 15분마다 토큰 갱신
+        if (decoded.exp > currentTime) {
+          login();
+          setName(decoded.username);
 
-        return () => clearInterval(interval);
-      } else {
-        console.log("token is expired");
+          const response = await api.get("/users/validate", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const newToken = response.data.token;
+          localStorage.setItem("token", newToken);
+          login();
+          setName(jwtDecode(newToken).username);
+        } else {
+          localStorage.removeItem("token");
+          logout();
+          setName("");
+        }
+      } catch (error) {
         localStorage.removeItem("token");
         logout();
         setName("");
+      } finally {
+        setAuthLoaded(true);
       }
-    } catch (error) {
-      console.error("Error decoding token:", error);
-      localStorage.removeItem("token");
-      logout();
-      setName("");
-    }
+    };
+
+    validateAndRefreshToken();
+
+    const interval = setInterval(validateAndRefreshToken, 15 * 60 * 1000);
+
+    return () => clearInterval(interval);
   }, []);
+
+  if (!authLoaded) return null;
 
   return <RouterProvider router={router} />;
 }
